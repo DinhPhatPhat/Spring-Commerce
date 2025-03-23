@@ -1,0 +1,35 @@
+# Ignore Maven build files
+target/
+build/
+dist/
+
+# Ignore IDE configs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.springBeans
+.sts4-cache
+
+# Ignore NetBeans
+/nbproject/private/
+/nbbuild/
+/nbdist/
+/.nb-gradle/
+
+# Ignore Eclipse-specific
+.apt_generated
+.classpath
+.factorypath
+.project
+
+# Ignore logs and OS-specific files
+logs/
+*.log
+.DS_Store
+
+# Keep Maven Wrapper
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar

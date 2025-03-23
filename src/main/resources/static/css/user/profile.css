@@ -1,0 +1,21 @@
+.avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.form-label {
+    min-width: 130px;
+}
+
+.form-control {
+    flex: 1;
+}

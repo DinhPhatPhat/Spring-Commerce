@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Our stories - Đăng ký</title>
+
+    <!--  Font Be Vietnam Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Vendor Active Template CSS Files -->
+    <link th:href="@{/vendor/active_vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/aos/aos.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
+
+    <!-- Main Active Template CSS File -->
+    <link th:href="@{/css/active_css/main.css}" rel="stylesheet">
+
+    <!-- CSS File -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font/bee_vietnam_pro.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/login_register/login_register.css}">
+
+    <!-- JAVASCRIPT File -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script th:src="@{/javascript/user/login_register.js}"></script>
+
+</head>
+<body>
+<!-- Header -->
+<div th:replace="~{layout/header :: header}"></div>
+
+<!-- Page Title -->
+<div class="page-title light-background">
+    <div class="container">
+        <h1>Đăng ký</h1>
+        <nav class="breadcrumbs">
+            <ol>
+                <li><a href="/">ourstories.space</a></li>
+                <li class="current">Đăng ký</li>
+            </ol>
+        </nav>
+    </div>
+</div><!-- End Page Title -->
+<div class="form-container">
+    <div class="login-register">
+        <form class="form-control" id="createHomeForm" enctype="multipart/form-data">
+            <h3 class="form-title">Xin chào, người kể chuyện</h3>
+
+            <label class="form-label" for="name">Tên hiển thị:</label>
+            <input class="form-control" type="text" id="name" name="name" required><br>
+
+            <label class="form-label" for="phoneNumber">Số điện thoại:</label>
+            <input class="form-control" type="text" id="phoneNumber" name="phoneNumber" required><br>
+
+            <label class="form-label" for="dateOfBirth">Ngày sinh:</label>
+            <input class="form-control" type="date" id="dateOfBirth" name="dateOfBirth" required><br>
+
+            <label class="form-label" for="bio">Tiểu sử:</label>
+            <input class="form-control" type="text" id="bio" name="bio" required><br>
+
+            <label class="form-label" for="email">Email:</label>
+            <input class="form-control" type="email" id="email" name="email" required><br>
+
+            <label class="form-label" for="password">Password:</label>
+            <input class="form-control" type="password" id="password" name="password" required><br>
+
+            <button class="btn login-register-btn" id="registerButton" type="button">Đăng ký</button>
+
+            <p>Đã là thành viên của Our stories? <a href="/user/login">Đăng nhập</a> </p>
+        </form>
+    </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{layout/footer :: footer}"></div>
+
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+<!-- Preloader -->
+<div id="preloader"></div>
+
+<!-- Vendor Active Template JS Files -->
+<script th:src="@{/vendor/active_vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/php-email-form/validate.js}"></script>
+<script th:src="@{/vendor/active_vendor/aos/aos.js}"></script>
+<script th:src="@{/vendor/active_vendor/swiper/swiper-bundle.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/purecounter/purecounter_vanilla.js}"></script>
+<script th:src="@{/vendor/active_vendor/glightbox/js/glightbox.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/imagesloaded/imagesloaded.pkgd.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/isotope-layout/isotope.pkgd.min.js}"></script>
+
+<!-- Main Active Template JS File -->
+<script th:src="@{/javascript/active_js/main.js}"></script>
+
+</body>
+</html>
