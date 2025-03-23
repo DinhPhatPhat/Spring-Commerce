@@ -22,8 +22,8 @@ public class StoryController {
         User user = (User) session.getAttribute("user");
         if (user != null) {
             model.addAttribute("user", user);
-            return "/story/createStory";
-        }
+            return "/story/createStory";}
+
         return "redirect:/user/login";
     }
 }

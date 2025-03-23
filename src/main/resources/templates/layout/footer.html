@@ -23,14 +23,14 @@
             <div class="col-md-6 col-lg-3 pl-lg-5">
                 <div class="widget">
                     <h3 class="widget-heading">Bài viết gần nhất</h3>
-                    <ul class="list-unstyled footer-blog-entry">
+                    <ul class="list-unstyled footer-blog-entry"  id="footer-stories">
                     </ul>
                 </div>
             </div>
             <div class="col-md-6 col-lg-3 pl-lg-5">
                 <div class="widget">
                     <h3 class="widget-heading">Contact to Phat</h3>
-                    <ul class="list-unstyled social-icons light mb-3" id="footer-stories">
+                    <ul class="list-unstyled social-icons light mb-3">
                         <li>
                             <a href="https://www.facebook.com/phatfioraa"><span class="bi bi-facebook"></span></a>
                         </li>
@@ -51,15 +51,15 @@
     </div>
 
     <script>
-        fetch('/find-top-3-stories')
+        fetch('/api/story/find-top-3-stories')
             .then(response => response.json())
             .then(data => {
                 let html = '';
                 data.forEach(story => {
                     html += `
                 <li>
-                    <span class="d-block date">${story.createAt}</span>
-                    <a href="/story/${story.id}">${story.name}</a>
+                    <span class="d-block date">${story.createdAt}</span>
+                    <a href="/story/${story.id}">${story.title}</a>
                 </li>
             `;
                 });

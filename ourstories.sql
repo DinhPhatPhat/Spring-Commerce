@@ -16,7 +16,7 @@ CREATE TABLE users (
     image_path VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     role TINYINT DEFAULT 0 CHECK (role IN (0, 1)), -- 0: User, 1: Admin
-    is_activated BIT DEFAULT 0
+    is_active BIT DEFAULT 0
 );
 
 -- STORIES TABLE --
@@ -26,6 +26,7 @@ CREATE TABLE stories (
     title   VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
     image_path  VARCHAR(255) DEFAULT NULL,
+    is_approved BIT DEFAULT 0,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT fk_stories_to_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

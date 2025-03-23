@@ -36,11 +36,12 @@ public class StoryService {
 
     public Story create(Story story, MultipartFile image) throws IOException {
         try{
-            if(!image.isEmpty()){
-                String imagePath = upLoadImage(image, story.getId());
-                story.setImagePath(imagePath);
+            Story savedStory = storyRepository.save(story);
+            if(image != null){
+                String imagePath = upLoadImage(image, savedStory.getId());
+                savedStory.setImagePath(imagePath);
             }
-            return storyRepository.save(story);
+            return storyRepository.save(savedStory);
         }
         catch(Exception e){
             return null;
@@ -54,14 +55,14 @@ public class StoryService {
         //If Dev
         if (new File("src/main/resources/static").exists()) {
             // Dev: resources/static/images/home/
-            uploadDir = "src/main/resources/static/images/story/";
-            accessPath = "/images/story/";
+            uploadDir = "src/main/resources/static/image/story/";
+            accessPath = "/image/story/";
         }
         //If Deploy
         else {
             // Deploy: Outside direct (uploads/)
-            uploadDir = "uploads/images/story/";
-            accessPath = "/uploads/images/story/";
+            uploadDir = "uploads/image/story/";
+            accessPath = "/uploads/image/story/";
 
         }
 
@@ -74,8 +75,9 @@ public class StoryService {
             fileExtension = imageFile.getOriginalFilename().substring(dotIndex);
         }
 
-        //File name: <home id>.<file extension> (Ex: H01.png)
-        String fileName = storyId + fileExtension;
+        System.out.println("Story id" + storyId);
+        //File name: <story id>.<file extension> (Ex: 1.png)
+        String fileName = String.valueOf(storyId) + fileExtension;
         //Upload path
         File uploadPath = new File(uploadDir);
 

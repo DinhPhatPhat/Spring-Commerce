@@ -30,10 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function submitRegisterForm() {
     const formData = new FormData;
-
-    const name = document.getElementById('name')
-    const phoneNumber = document.getElementById('phoneNumber')
-    const dateOfBirth = document.getElementById('dateOfBirth')
     const registerBtn = document.getElementById('registerButton')
 
     registerBtn.disabled = true

@@ -54,8 +54,8 @@ public class User {
     @Column(name = "role", columnDefinition = "TINYINT DEFAULT 0")
     private int role; // 0: User, 1: Admin
 
-    @Column(name = "is_activated", columnDefinition = "BIT DEFAULT 0")
-    private boolean isActivated;
+    @Column(name = "is_active", columnDefinition = "BIT DEFAULT 0")
+    private boolean isActive;
 
     @PrePersist
     protected void onCreate() {

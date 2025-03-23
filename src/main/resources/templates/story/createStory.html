@@ -62,23 +62,28 @@
                             <p th:text="${user.getName()}"></p>
                             <p th:text="${user.getEmail()}"></p>
                         </div>
-
-
                 </div>
+                <br>
 
+                <div class=" form-group">
+                    <label class="small">Chọn ảnh</label>
+                    <input type="file" name="storyImage" class="form-control" id="storyImage" required="">
+                </div>
             </div>
 
             <div class="col-lg-8">
-                <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+                <form role="form" class="php-email-form" onsubmit="return false">
                     <div class="row">
-                        <div class="col-md-6 form-group">
-                            <input type="text" name="name" class="form-control" id="name" placeholder="Tiêu đề câu chuyện" required="">
+                        <div class="col-md-8 form-group">
+                            <input type="text" name="title" class="form-control" id="title" placeholder="Tiêu đề câu chuyện" required="">
                         </div>
                     </div>
+
                     <div class="form-group mt-3">
-                        <textarea class="form-control" name="content" placeholder="Nội dung" required=""></textarea>
+                        <textarea class="form-control" name="content" id="content" placeholder="Nội dung" required=""></textarea>
                     </div>
-                    <div class="text-center"><button type="submit">Chia sẽ câu chuyện</button></div>
+
+                    <div class="text-center"><button type="submit" id="createStoryButton">Chia sẽ câu chuyện</button></div>
                 </form>
             </div><!-- End Contact Form -->
         </div>
@@ -98,7 +103,6 @@
 
 <!-- Vendor Active Template JS Files -->
 <script th:src="@{/vendor/active_vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/vendor/active_vendor/php-email-form/validate.js}"></script>
 <script th:src="@{/vendor/active_vendor/aos/aos.js}"></script>
 <script th:src="@{/vendor/active_vendor/swiper/swiper-bundle.min.js}"></script>
 <script th:src="@{/vendor/active_vendor/purecounter/purecounter_vanilla.js}"></script>

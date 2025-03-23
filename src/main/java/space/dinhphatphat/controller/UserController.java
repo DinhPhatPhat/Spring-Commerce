@@ -41,26 +41,33 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String login(){
-        return "user/login";
+    public String login(HttpSession httpSession){
+        if(httpSession.getAttribute("user") == null){
+            return "user/login";
+        }
+        return "redirect:/user";
     }
+
     @GetMapping("/register")
-    public String register(){
-        return "user/register";
+    public String register(HttpSession httpSession){
+        if(httpSession.getAttribute("user") == null){
+            return "user/register";
+        }
+        return "redirect:/user";
     }
 
     @GetMapping("/forgot-password")
     public String forgotPassword(){
         return "user/forgotPassword";
     }
+
     @GetMapping("/verify")
     public String verify(@RequestParam String token, Model model){
-
         //Check is valid account token, update user is active, delete used token, render verify page
         Token checkedToken = tokenService.checkToken(token);
         if(checkedToken != null){
             User user = checkedToken.getUser();
-            user.setActivated(true);
+            user.setActive(true);
             userService.update(user);
             model.addAttribute("user", user);
             tokenService.delete(checkedToken);
@@ -68,6 +75,7 @@ public class UserController {
         }
         return "redirect:/user/register";
     }
+
     @GetMapping("/change-password")
     public String changePassword(@RequestParam String token, Model model){
         Token checkedToken = tokenService.checkToken(token);

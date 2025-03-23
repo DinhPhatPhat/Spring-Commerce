@@ -96,14 +96,13 @@ public class UserService {
         sendChangePasswordEmail(user, token.getToken());
     }
 
-
     // Wrong email or password 0
     // Not verify yet: 1
     // Correct email and password, verified: 2
     public int checkLogin(String email, String password){
         Optional<User> user = userRepository.findByEmail(email);
         if(user.isPresent() && user.get().getPassword().equals(password)){
-            if(user.get().isActivated()){
+            if(user.get().isActive()){
                 return 2;
             }
             else{

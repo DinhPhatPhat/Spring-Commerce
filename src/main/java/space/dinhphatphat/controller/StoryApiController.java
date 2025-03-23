@@ -5,6 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,14 +25,23 @@ public class StoryApiController {
     @Autowired
     StoryService storyService;
 
-    @PostMapping("/find-top-3-stories")
+    @GetMapping("/find-top-3-stories")
     public List<Story> FindTop3NewsStories() {
         return storyService.findTop3ByOrderByCreatedAtDesc();
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createStory(@Valid @ModelAttribute Story story, @RequestParam(required = false) MultipartFile image, HttpSession session) {
+    public ResponseEntity<?> createStory(@Valid @ModelAttribute Story story, BindingResult bindingResult, @RequestParam(required = false) MultipartFile image, HttpSession session) {
         User user = (User) session.getAttribute("user");
+
+        // BindingResult store valid error, then log and return to front-end
+        if (bindingResult.hasErrors()) {
+            // Log validation
+            bindingResult.getAllErrors().forEach(error ->
+                    System.out.println("Validation error: " + error.getDefaultMessage())
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vui lòng nhập đầy đủ nội dung bài biết");
+        }
 
         if (image != null && image .getSize() > 3 * 1024 * 1024) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("File ảnh cần bé hơn 3MB");
@@ -39,7 +49,7 @@ public class StoryApiController {
         try {
             story.setUser(user);
             Story createdStory = storyService.create(story, image);
-            return ResponseEntity.status(HttpStatus.OK).body(createdStory);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdStory);
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Lỗi hệ thống, vui lòng thử lại sau");

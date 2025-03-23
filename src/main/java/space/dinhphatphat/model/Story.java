@@ -16,7 +16,8 @@ import java.util.Date;
 public class Story {
 
     @Id
-    @Column(name = "id",  columnDefinition = "INT AUTO_INCREMENT")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", columnDefinition = "INT AUTO_INCREMENT")
     private int id;
 
     @ManyToOne
@@ -32,15 +33,20 @@ public class Story {
     @Column(name = "image_path", length = 255, columnDefinition = "VARCHAR(255) DEFAULT NULL")
     private String imagePath;
 
+    @Column(name = "is_approved", columnDefinition = "BIT DEFAULT 0")
+    private boolean isApproved;
+
     @Column(name = "created_at",columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
     private Timestamp createdAt;
 
     @Column(name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
     private Timestamp updatedAt;
 
+    //Update approving the stories later
     @PrePersist
     protected void onCreate() {
         createdAt = Timestamp.valueOf(LocalDateTime.now());
+        isApproved = true;
     }
 
     @PreUpdate

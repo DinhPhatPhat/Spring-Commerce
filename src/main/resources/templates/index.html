@@ -62,12 +62,12 @@
                     </script>
 
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide" th:each="home : ${homes}">
+                        <div class="swiper-slide" th:each="story : ${stories}">
                             <div class="image-container">
-                                <img th:src="@{${home.getImagePath()}}" alt="Image" class="img-fluid">
+                                <img th:src="@{${story.getImagePath()}}" alt="Image" class="img-fluid">
                                 <div class="overlay">
-                                    <div class="name" th:text="${home.getName()}"></div>
-                                    <div class="address" th:text="${home.getAddress()}"></div>
+                                    <div class="name" th:text="${story.getTitle()}"></div>
+                                    <div class="address" th:text="${story.getUser().getName()}"></div>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +84,11 @@
                 <p data-aos="fade-up">
                     Một không gian mở, nơi bạn có thể kể câu chuyện của chính mình và được lắng nghe những câu chuyện khác.
                 </p>
+                <p class="mt-5" data-aos="fade-up">
+                    <a href="#" class="btn btn-get-started">Get Started</a>
+                </p>
             </div>
+
         </div>
     </div>
 </section><!-- /About Section -->
