@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StoryService {
@@ -26,6 +27,10 @@ public class StoryService {
         return storyRepository.findAll();
     }
 
+    public List<Story> findAllOrderByUpdatedAtDesc(){
+        return storyRepository.findAllByOrderByUpdatedAtDesc();
+    }
+
     public List<Story> findAllByUserId(int userId){
         return storyRepository.findAllByUser_Id(userId);
     }
@@ -34,6 +39,9 @@ public class StoryService {
         return storyRepository.findTop3ByOrderByCreatedAtDesc();
     }
 
+    public Story findById(int id){
+        return storyRepository.findById(id).orElse(null);
+    }
     public Story create(Story story, MultipartFile image) throws IOException {
         try{
             Story savedStory = storyRepository.save(story);
@@ -53,18 +61,18 @@ public class StoryService {
         String uploadDir;
         String accessPath;
         //If Dev
-        if (new File("src/main/resources/static").exists()) {
-            // Dev: resources/static/images/home/
-            uploadDir = "src/main/resources/static/image/story/";
-            accessPath = "/image/story/";
-        }
+//        if (new File("src/main/resources/static").exists()) {
+//            // Dev: resources/static/images/home/
+//            uploadDir = "src/main/resources/static/image/story/";
+//            accessPath = "/image/story/";
+//        }
         //If Deploy
-        else {
+//        else {
             // Deploy: Outside direct (uploads/)
             uploadDir = "uploads/image/story/";
             accessPath = "/uploads/image/story/";
 
-        }
+//        }
 
         //Take file extension
         String fileExtension = "";
@@ -96,7 +104,7 @@ public class StoryService {
 
     public Story update(Story story, MultipartFile image) throws IOException {
         try{
-            if(!image.isEmpty()){
+            if(image != null){
                 String imagePath = upLoadImage(image, story.getId());
                 story.setImagePath(imagePath);
             }

@@ -22,6 +22,7 @@ public class SecurityConfig {
                         .requestMatchers("/story/**").permitAll()
                         .requestMatchers("/", "/info", "/user").permitAll()
                         .requestMatchers("/css/**", "/javascript/**", "/image/**", "/vendor/**" ).permitAll()
+                        .requestMatchers("/uploads/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

@@ -62,13 +62,19 @@
                     </script>
 
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide" th:each="story : ${stories}">
+                        <div class="swiper-slide">
                             <div class="image-container">
-                                <img th:src="@{${story.getImagePath()}}" alt="Image" class="img-fluid">
-                                <div class="overlay">
-                                    <div class="name" th:text="${story.getTitle()}"></div>
-                                    <div class="address" th:text="${story.getUser().getName()}"></div>
-                                </div>
+                                <img th:src="@{image/slideshow/1.png}" alt="Image" class="img-fluid">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="image-container">
+                                <img th:src="@{image/slideshow/2.png}" alt="Image" class="img-fluid">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="image-container">
+                                <img th:src="@{image/slideshow/3.png}" alt="Image" class="img-fluid">
                             </div>
                         </div>
                     </div>
@@ -85,7 +91,7 @@
                     Một không gian mở, nơi bạn có thể kể câu chuyện của chính mình và được lắng nghe những câu chuyện khác.
                 </p>
                 <p class="mt-5" data-aos="fade-up">
-                    <a href="#" class="btn btn-get-started">Get Started</a>
+                    <a href="/story/create" class="btn btn-get-started">Kể chuyện</a>
                 </p>
             </div>
 
@@ -113,64 +119,23 @@
 
         <div class="row gy-5">
 
-            <div class="col-lg-4 col-md-6">
+            <div class="col-lg-4 col-md-6" th:each="story : ${stories}">
                 <article>
 
                     <div class="post-img">
-                        <img th:src="@{image/active_image/blog/blog-1.jpg}" alt="" class="img-fluid">
+                        <img th:src="${story.getImagePath()}" alt="" class="img-fluid thumbnail">
                     </div>
 
                     <div class="meta-top">
                         <ul>
-                            <li class="d-flex align-items-center"><a href="blog-details.html">Sorts</a></li>
-                            <li class="d-flex align-items-center"><i class="bi bi-dot"></i> <a href="blog-details.html"><time datetime="2022-01-01">Jan 1, 2022</time></a></li>
+                            <li class="d-flex align-items-center"><i class="bi bi-dot"></i>
+                                <a th:href="@{/story/{id}(id=${story.getId()})}">
+                                <time th:text="${#dates.format(story.updatedAt, 'dd/MM/yyyy HH:mm')}" th:datetime="${#dates.format(story.getUpdatedAt(), 'dd/MM/yyyy HH:mm')}"></time></a></li>
                         </ul>
                     </div>
 
                     <h2 class="title">
-                        <a href="blog-details.html">Dolorum optio tempore voluptas dignissimos</a>
-                    </h2>
-
-                </article>
-            </div><!-- End post list item -->
-
-            <div class="col-lg-4 col-md-6">
-                <article>
-
-                    <div class="post-img">
-                        <img th:src="@{image/active_image/blog/blog-1.jpg}" alt="" class="img-fluid">
-                    </div>
-
-                    <div class="meta-top">
-                        <ul>
-                            <li class="d-flex align-items-center"><a href="blog-details.html">Sorts</a></li>
-                            <li class="d-flex align-items-center"><i class="bi bi-dot"></i> <a href="blog-details.html"><time datetime="2022-01-01">Jan 1, 2022</time></a></li>
-                        </ul>
-                    </div>
-
-                    <h2 class="title">
-                        <a href="blog-details.html">Dolorum optio tempore voluptas dignissimos</a>
-                    </h2>
-
-                </article>
-            </div><!-- End post list item -->
-
-            <div class="col-lg-4 col-md-6">
-                <article>
-
-                    <div class="post-img">
-                        <img th:src="@{image/active_image/blog/blog-1.jpg}" alt="" class="img-fluid">
-                    </div>
-
-                    <div class="meta-top">
-                        <ul>
-                            <li class="d-flex align-items-center"><a href="blog-details.html">Sorts</a></li>
-                            <li class="d-flex align-items-center"><i class="bi bi-dot"></i> <a href="blog-details.html"><time datetime="2022-01-01">Jan 1, 2022</time></a></li>
-                        </ul>
-                    </div>
-
-                    <h2 class="title">
-                        <a href="blog-details.html">Dolorum optio tempore voluptas dignissimos</a>
+                        <a th:href="@{/story/{id}(id=${story.getId()})}" th:text="${story.getTitle()}"></a>
                     </h2>
 
                 </article>

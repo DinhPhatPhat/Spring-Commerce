@@ -29,9 +29,15 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script th:src="@{/javascript/user/profile.js}"></script>
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+
+    <!-- DataTables -->
     <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
 
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css">
 
 </head>
 <body>
@@ -57,7 +63,6 @@
     <div class="container" data-aos="fade">
 
         <div class="row gy-5 gx-lg-5">
-
             <div class="col-lg-4">
 
                 <div class="info text-center">
@@ -69,6 +74,9 @@
                     <h3 th:text="${user.getEmail()}"></h3>
                     <button id="logoutButton" class="btn btn-close-white"><i class="bi bi-arrow-return-left flex-shrink-0"> Đăng xuất</i></button>
                 </div>
+                <p class="mt-5" data-aos="fade-up">
+                    <a href="/story/create" class="btn btn-get-started"><i class="bi bi-book-fill flex-shrink-0"> Viết một câu chuyện</i></a>
+                </p>
             </div>
 
             <div class="col-lg-8">
@@ -101,6 +109,31 @@
             </div>
         </div>
     </div>
+
+    <div class="container">
+        <table id="storyTable" class="hover">
+            <thead>
+            <tr>
+                <th>Tiêu đề</th>
+                <th>Ngày tạo</th>
+                <th>Cập nhật gần nhất</th>
+                <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="story : ${stories}">
+                <td th:text="${story.title}"></td>
+                <td th:text="${#dates.format(story.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${#dates.format(story.updatedAt, 'dd/MM/yyyy HH:mm')}"></td>
+                <td>
+                    <a th:href="@{/story/update/{id}(id=${story.id})}" class="btn-edit">Chỉnh sửa</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
 </section><!-- /Contact Section -->
 
 
@@ -127,5 +160,6 @@
 
 <!-- Main Active Template JS File -->
 <script th:src="@{/javascript/active_js/main.js}"></script>
+
 </body>
 </html>

@@ -12,4 +12,6 @@ public interface StoryRepository extends JpaRepository<Story, Integer> {
     List<Story> findAllByUser_Id(int user_id);
 
     List<Story> findTop3ByOrderByCreatedAtDesc();
+
+    List<Story> findAllByOrderByUpdatedAtDesc();
 }

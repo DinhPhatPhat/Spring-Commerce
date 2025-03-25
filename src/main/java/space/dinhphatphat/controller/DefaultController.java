@@ -21,7 +21,7 @@ public class DefaultController {
 
     @GetMapping
     public String index(Model model){
-        List<Story> stories = storyService.findAll();
+        List<Story> stories = storyService.findAllOrderByUpdatedAtDesc();
         model.addAttribute("stories", stories);
         return "index";
     }

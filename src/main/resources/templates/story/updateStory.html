@@ -22,7 +22,7 @@
 
     <!-- CSS File -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/user/profile.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/story/create_update.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/font/bee_vietnam_pro.css}">
 
     <!-- JAVASCRIPT File -->
@@ -37,11 +37,12 @@
 <!-- Page Title -->
 <div class="page-title light-background">
     <div class="container">
-        <h1>Viết câu chuyện</h1>
+        <h1>Cập nhật câu chuyện</h1>
         <nav class="breadcrumbs">
             <ol>
                 <li><a href="/">ourstories.space</a></li>
-                <li class="current">Viết câu chuyện</li>
+                <li><a href="/user">Quản lý tài khoản - câu chuyện</a></li>
+                <li class="current">Cập nhật câu chuyện</li>
             </ol>
         </nav>
     </div>
@@ -58,34 +59,41 @@
 
                 <div class="info">
                     <h3>Người kể chuyện</h3>
-                        <div>
-                            <p th:text="${user.getName()}"></p>
-                            <p th:text="${user.getEmail()}"></p>
-                        </div>
+                    <div>
+                        <p th:text="${user.getName()}"></p>
+                        <p th:text="${user.getEmail()}"></p>
+                    </div>
                 </div>
                 <br>
 
+
+                <div class="info">
+                    <img th:src="${story.getImagePath() != null ? story.getImagePath() : '/image/user/default.jpg'}"
+                         alt="Avatar" class="thumbnail">
+                </div>
+                <br>
                 <div class=" form-group">
-                    <label class="small">Chọn ảnh</label>
                     <input type="file" name="storyImage" class="form-control" id="storyImage" accept="image/*" required="">
                 </div>
             </div>
 
-            <div class="col-lg-8">
+            <div class="col-lg-8" th:if="${story}">
                 <form role="form" class="php-email-form" onsubmit="return false">
+                    <input type="hidden" id="id" th:value="${story.getId()}">
                     <div class="row">
                         <div class="col-md-8 form-group">
-                            <input type="text" name="title" class="form-control" id="title" placeholder="Tiêu đề câu chuyện" required>
+                            <input type="text" name="title" class="form-control" id="title" placeholder="Tiêu đề câu chuyện" th:value="${story.getTitle()}" required>
                         </div>
                     </div>
 
                     <div class="form-group mt-3">
-                        <textarea class="form-control" name="content" id="content" placeholder="Nội dung" required></textarea>
+                        <textarea class="form-control" name="content" id="content" placeholder="Nội dung" th:text="${story.getContent()}" required ></textarea>
                     </div>
 
-                    <div class="text-center"><button type="submit" id="createStoryButton">Chia sẽ câu chuyện</button></div>
+                    <div class="text-center"><button type="submit" id="updateStoryButton">Cập nhật câu chuyện</button></div>
                 </form>
-            </div><!-- End Contact Form -->
+            </div>
+            <div class="col-lg-8" th:unless="${story}">Câu chuyện không tồn tại</div>
         </div>
     </div>
 

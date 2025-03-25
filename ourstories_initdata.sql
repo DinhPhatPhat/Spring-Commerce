@@ -1,11 +1,4 @@
-insert into peacestay.homes values 
-(
-	"Peacestay Thanh Bình",
-    "Nguyễn Du",
-    "0868063567",
-    "Test home description"
-    "..."
-)
+
 
 insert into ourstories.users(name, phone_number, email, password) values
 (
@@ -15,9 +8,10 @@ insert into ourstories.users(name, phone_number, email, password) values
     "phat123"
 );
 
+update ourstories.users set is_active = 1 
 select * from ourstories.users u 
 
-select * from ourstories.tokens
+select * from ourstories.stories
 
 delete from ourstories.users u where email = '52200010@student.tdtu.edu.vn'
 

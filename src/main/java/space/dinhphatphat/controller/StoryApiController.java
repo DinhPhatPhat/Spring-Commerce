@@ -33,14 +33,16 @@ public class StoryApiController {
     @PostMapping("/create")
     public ResponseEntity<?> createStory(@Valid @ModelAttribute Story story, BindingResult bindingResult, @RequestParam(required = false) MultipartFile image, HttpSession session) {
         User user = (User) session.getAttribute("user");
-
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Hãy đăng nhập");
+        }
         // BindingResult store valid error, then log and return to front-end
         if (bindingResult.hasErrors()) {
             // Log validation
             bindingResult.getAllErrors().forEach(error ->
                     System.out.println("Validation error: " + error.getDefaultMessage())
             );
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vui lòng nhập đầy đủ nội dung bài biết");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vui lòng nhập đầy đủ nội dung bài viết");
         }
 
         if (image != null && image .getSize() > 3 * 1024 * 1024) {
@@ -57,17 +59,40 @@ public class StoryApiController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateStory(@Valid @ModelAttribute Story story, @RequestParam(required = false) MultipartFile image , HttpSession session) throws IOException {
+    public ResponseEntity<?> updateStory(@Valid @ModelAttribute Story story, BindingResult bindingResult,
+                                         @RequestParam(required = false) MultipartFile image ,
+                                         HttpSession session) throws IOException {
+
         User user = (User) session.getAttribute("user");
-        if (user.getId() != story.getUser().getId()) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Hãy đăng nhập");
+        }
+
+        // BindingResult store valid error, then log and return to front-end
+        if (bindingResult.hasErrors()) {
+            // Log validation
+            bindingResult.getAllErrors().forEach(error ->
+                    System.out.println("Validation error: " + error.getDefaultMessage())
+            );
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vui lòng nhập đầy đủ nội dung bài viết");
+        }
+
+        Story existingStory = storyService.findById(story.getId());
+        if (existingStory == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không tìm thấy story");
+        }
+
+        if (user.getId() != existingStory.getUser().getId()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Truy cập trái phép");
         }
         if (image != null && image .getSize() > 3 * 1024 * 1024) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("File ảnh cần bé hơn 3MB");
         }
         try {
-            Story updatedStory =  storyService.update(story, image);
-            return ResponseEntity.status(HttpStatus.OK).body(updatedStory);
+            existingStory.setTitle(story.getTitle());
+            existingStory.setContent(story.getContent());
+            storyService.update(existingStory, image);
+            return ResponseEntity.status(HttpStatus.OK).body("Cập nhật thành công");
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Lỗi hệ thống, vui lòng thử lại sau");
