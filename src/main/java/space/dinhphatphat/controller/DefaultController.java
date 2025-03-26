@@ -23,10 +23,12 @@ public class DefaultController {
     public String index(Model model){
         List<Story> stories = storyService.findAllOrderByUpdatedAtDesc();
         model.addAttribute("stories", stories);
+        model.addAttribute("page", "index");
         return "index";
     }
     @GetMapping("/info")
-    public String info(){
+    public String info(Model model){
+        model.addAttribute("page", "info");
         return "info";
     }
 

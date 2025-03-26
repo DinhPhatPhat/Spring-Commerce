@@ -46,6 +46,7 @@ public class Story {
     @PrePersist
     protected void onCreate() {
         createdAt = Timestamp.valueOf(LocalDateTime.now());
+        updatedAt = Timestamp.valueOf(LocalDateTime.now());
         isApproved = true;
     }
 

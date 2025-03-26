@@ -2,7 +2,11 @@ package space.dinhphatphat.controller;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -15,7 +19,9 @@ import space.dinhphatphat.model.User;
 import space.dinhphatphat.service.StoryService;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Validated
 @RestController
@@ -24,6 +30,27 @@ public class StoryApiController {
 
     @Autowired
     StoryService storyService;
+
+    @GetMapping("")
+    public ResponseEntity<Map<String, Object>> getStories(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "search", required = false) String search) {
+
+        int pageSize = 6;
+        Page<Story> storiesPage;
+
+        if (search != null && !search.isEmpty()) {
+            storiesPage = (Page<Story>) storyService.searchStories(search, PageRequest.of(page - 1, pageSize));
+        } else {
+            storiesPage = (Page<Story>) storyService.findAll(PageRequest.of(page - 1, pageSize, Sort.by("updatedAt").descending()));
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("stories", storiesPage.getContent());
+        response.put("totalPages", storiesPage.getTotalPages());
+
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/find-top-3-stories")
     public List<Story> FindTop3NewsStories() {

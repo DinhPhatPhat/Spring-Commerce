@@ -13,6 +13,8 @@ select * from ourstories.users u
 
 select * from ourstories.stories
 
+insert into ourstories.stories (title, content) values ()
+
 delete from ourstories.users u where email = '52200010@student.tdtu.edu.vn'
 
 insert into ourstories.tokens (token, user_id, `type`) values

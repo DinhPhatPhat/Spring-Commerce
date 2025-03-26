@@ -35,6 +35,7 @@ public class UserController {
         }
 
         List<Story> stories = storyService.findAllByUserId(user.getId());
+        model.addAttribute("page", "user");
         model.addAttribute("user", user);
         model.addAttribute("stories", stories);
         return "user/profile";

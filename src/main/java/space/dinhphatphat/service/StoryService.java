@@ -2,6 +2,8 @@ package space.dinhphatphat.service;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.multipart.MultipartFile;
@@ -113,6 +115,14 @@ public class StoryService {
         catch(Exception e){
             return null;
         }
+    }
+
+    public Page<Story> findAll(Pageable pageable) {
+        return storyRepository.findAll(pageable);
+    }
+
+    public Page<Story> searchStories(String search, Pageable pageable) {
+        return storyRepository.findByTitleContainingIgnoreCase(search, pageable);
     }
 
 }

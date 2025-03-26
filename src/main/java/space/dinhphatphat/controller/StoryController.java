@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import space.dinhphatphat.model.Story;
 import space.dinhphatphat.model.User;
 import space.dinhphatphat.service.StoryService;
@@ -40,6 +41,15 @@ public class StoryController {
             return "/story/updateStory";}
 
         return "redirect:/user/login";
+    }
+
+    @GetMapping("/{id}")
+    public String readStory(Model model, @PathVariable int id) {
+        Story story = storyService.findById(id);
+        if (story != null) {
+            model.addAttribute("story", story);
+        }
+        return "/story/readStory";
     }
 
 }
