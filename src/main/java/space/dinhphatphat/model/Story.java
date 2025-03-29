@@ -2,10 +2,10 @@ package space.dinhphatphat.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "stories")
@@ -30,6 +30,9 @@ public class Story {
     @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
 
+    @Column(name = "meta", columnDefinition = "VARCHAR(255) DEFAULT '' ")
+    private String meta;
+
     @Column(name = "image_path", length = 255, columnDefinition = "VARCHAR(255) DEFAULT NULL")
     private String imagePath;
 
@@ -48,6 +51,18 @@ public class Story {
         createdAt = Timestamp.valueOf(LocalDateTime.now());
         updatedAt = Timestamp.valueOf(LocalDateTime.now());
         isApproved = true;
+    }
+
+    public void setMetaWithId() {
+        this.meta = toSlug(this.title) + "-" + this.id;
+    }
+    
+    public static String toSlug(String input) {
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        String slug = normalized.replaceAll("\\p{M}", ""); // Loại bỏ dấu
+        slug = slug.replaceAll("[^a-zA-Z0-9\\s-]", "").toLowerCase(); // Chỉ giữ lại chữ cái, số, khoảng trắng, dấu '-'
+        slug = slug.replaceAll("\\s+", "-"); // Thay khoảng trắng thành '-'
+        return slug;
     }
 
     @PreUpdate

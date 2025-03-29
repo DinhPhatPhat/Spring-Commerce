@@ -12,6 +12,9 @@ import space.dinhphatphat.model.Story;
 import space.dinhphatphat.model.User;
 import space.dinhphatphat.service.StoryService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("story")
 public class StoryController {
@@ -43,13 +46,17 @@ public class StoryController {
         return "redirect:/user/login";
     }
 
-    @GetMapping("/{id}")
-    public String readStory(Model model, @PathVariable int id) {
-        Story story = storyService.findById(id);
+    @GetMapping("/{meta}")
+    public String readStory(Model model, @PathVariable String meta) {
+        Story story = storyService.findByMeta(meta);
+        List<Story> top3Stories = storyService.findTop3ByOrderByCreatedAtDesc();
         if (story != null) {
             model.addAttribute("story", story);
+            model.addAttribute("top3Stories", top3Stories);
+            return "/story/readStory";
         }
-        return "/story/readStory";
+        return "redirect:/";
+
     }
 
 }

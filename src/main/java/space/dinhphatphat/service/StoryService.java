@@ -44,6 +44,10 @@ public class StoryService {
     public Story findById(int id){
         return storyRepository.findById(id).orElse(null);
     }
+
+    public Story findByMeta(String meta){
+        return storyRepository.findByMeta(meta);
+    }
     public Story create(Story story, MultipartFile image) throws IOException {
         try{
             Story savedStory = storyRepository.save(story);
@@ -51,6 +55,7 @@ public class StoryService {
                 String imagePath = upLoadImage(image, savedStory.getId());
                 savedStory.setImagePath(imagePath);
             }
+            savedStory.setMetaWithId();
             return storyRepository.save(savedStory);
         }
         catch(Exception e){

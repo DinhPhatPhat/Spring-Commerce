@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Our stories - Kể chuyện</title>
+
+    <!--  Font Be Vietnam Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Vendor Active Template CSS Files -->
+    <link th:href="@{/vendor/active_vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/aos/aos.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
+
+    <!-- Main Active Template CSS File -->
+    <link th:href="@{/css/active_css/main.css}" rel="stylesheet">
+
+    <!-- CSS File -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/story/create_update.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font/bee_vietnam_pro.css}">
+
+    <!-- JAVASCRIPT File -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script th:src="@{/javascript/story/create_update.js}"></script>
+
+</head>
+<body>
+<!-- Header -->
+<div th:replace="~{layout/header :: header}"></div>
+
+<!-- Page Title -->
+<div class="page-title light-background">
+    <div class="container">
+        <h1>Đọc câu chuyện</h1>
+        <nav class="breadcrumbs">
+            <ol>
+                <li><a href="/">ourstories.space</a></li>
+                <li class="current">Đọc câu chuyện</li>
+            </ol>
+        </nav>
+    </div>
+</div><!-- End Page Title -->
+
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-lg-8">
+
+            <!-- Blog Details Section -->
+            <section id="blog-details" class="blog-details section">
+                <div class="container">
+                    <article class="article">
+                        <div class="post-img">
+                            <img th:src="${story.getImagePath() != null ? story.getImagePath() : '/image/story/default.jpg' }" alt="" class="img-fluid">
+                        </div>
+
+
+                        <h2 class="title" th:text="${story.getTitle()}"></h2>
+
+                        <div class="meta-top">
+                            <ul>
+                                <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="#" th:text="${story.getUser().getName()}"></a></li>
+                                <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="#"><time
+                                        th:text="${story.getUpdatedAt()}"></time></a></li>
+                                <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a href="#blog-comments">12
+                                    Comments</a></li>
+                            </ul>
+                        </div><!-- End meta top -->
+
+                        <div class="content" >
+                            <p th:text="${story.getContent()} " class="small"></p>
+                        </div><!-- End post content -->
+
+
+                    </article>
+
+                </div>
+            </section><!-- /Blog Details Section -->
+
+            <!-- Blog Comments Section -->
+            <section id="blog-comments" class="blog-comments section">
+
+            </section><!-- /Blog Comments Section -->
+
+            <!-- Comment Form Section -->
+            <section id="comment-form" class="comment-form section">
+                <div class="container">
+                    <form action="">
+                        <h4>Bình luận</h4>
+                        <p>Hãy chia sẽ quan điểm của bạn </p>
+                        <div class="row">
+                            <div class="col form-group">
+                                <textarea name="comment" class="form-control" placeholder="Your Comment*"></textarea>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Bình luận</button>
+                        </div>
+                    </form>
+
+                </div>
+            </section><!-- /Comment Form Section -->
+        </div>
+
+        <div class="col-lg-4 sidebar">
+
+            <div class="widgets-container">
+
+                <!-- Blog Author Widget -->
+                <div class="blog-author-widget widget-item">
+
+                    <div class="d-flex flex-column align-items-center">
+                        <img th:src="${story.getUser().getImagePath() != null ? story.getUser().getImagePath() : '/image/user/default.jpg'}" class="rounded-circle flex-shrink-0" alt="">
+                        <h4 th:text="${story.getUser().getName()}"></h4>
+                        <p th:text="${story.getUser().getBio()}">
+                        </p>
+
+                    </div>
+                </div><!--/Blog Author Widget -->
+
+                <!-- Recent Posts Widget -->
+                <div class="recent-posts-widget widget-item">
+
+                    <h3 class="widget-title">Câu chuyện nổi bật</h3>
+
+                    <div class="post-item">
+                        <h4><a href="blog-details.html">Nihil blanditiis at in nihil autem</a></h4>
+                        <time datetime="2020-01-01">Jan 1, 2020</time>
+                    </div><!-- End recent post item-->
+
+                    <div class="post-item">
+                        <h4><a href="blog-details.html">Quidem autem et impedit</a></h4>
+                        <time datetime="2020-01-01">Jan 1, 2020</time>
+                    </div><!-- End recent post item-->
+
+
+                </div><!--/Recent Posts Widget -->
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{layout/footer :: footer}"></div>
+
+
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+<!-- Preloader -->
+<div id="preloader"></div>
+
+<!-- Vendor Active Template JS Files -->
+<script th:src="@{/vendor/active_vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/aos/aos.js}"></script>
+<script th:src="@{/vendor/active_vendor/swiper/swiper-bundle.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/purecounter/purecounter_vanilla.js}"></script>
+<script th:src="@{/vendor/active_vendor/glightbox/js/glightbox.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/imagesloaded/imagesloaded.pkgd.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/isotope-layout/isotope.pkgd.min.js}"></script>
+
+<!-- Main Active Template JS File -->
+<script th:src="@{/javascript/active_js/main.js}"></script>
+</body>
+</html>

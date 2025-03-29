@@ -13,7 +13,11 @@ select * from ourstories.users u
 
 select * from ourstories.stories
 
-insert into ourstories.stories (title, content) values ()
+insert into ourstories.stories (title, content, user_id) values (
+"heas",
+"dsaads",
+1
+)
 
 delete from ourstories.users u where email = '52200010@student.tdtu.edu.vn'
 

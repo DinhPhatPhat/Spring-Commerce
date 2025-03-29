@@ -25,6 +25,7 @@ CREATE TABLE stories (
     user_id INT NOT NULL,
     title   VARCHAR(255) NOT NULL,
     content TEXT NOT NULL,
+    meta VARCHAR(255) DEFAULT "",
     image_path  VARCHAR(255) DEFAULT NULL,
     is_approved BIT DEFAULT 0,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -25,24 +25,26 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="col-lg-4 col-md-6">
                 <article>
                     <div class="post-img">
-                        <img src="${story.imagePath || '/image/story/default.jpg'}" alt="" class="img-fluid thumbnail">
+                        <a href="/story/${story.meta}">
+                            <img src="${story.imagePath || '/image/story/default.jpg'}" alt="" class="img-fluid thumbnail">
+                        </a>
                     </div>
                     <div class="meta-top">
                         <ul>
                             <li class="d-flex align-items-center"><i class="bi bi-dot"></i>
-                                <a href="/story/${story.id}">
+                                <a href="/story/${story.meta}">
                                    ${story.user.name}
                                 </a>
                             </li>
                             <li class="d-flex align-items-center"><i class="bi bi-dot"></i>
-                                <a href="/story/${story.id}">
+                                <a href="/story/${story.meta}">
                                     <time datetime="${story.updatedAt}">${formatDate(story.updatedAt)}</time>
                                 </a>
                             </li>
                         </ul>
                     </div>
                     <h2 class="title">
-                        <a href="/story/${story.id}">${story.title}</a>
+                        <a href="/story/${story.meta}">${story.title}</a>
                     </h2>
                 </article>
             </div>
@@ -71,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function () {
             paginationContainer.appendChild(li);
         };
 
-        // Luôn hiển thị trang đầu tiên
+        // Always show the first page
         if (totalPages > 1) addPage(1);
 
         let startPage = Math.max(2, currentPage - Math.floor(maxVisiblePages / 2));
@@ -89,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
             paginationContainer.appendChild(document.createTextNode("..."));
         }
 
-        // Luôn hiển thị trang cuối cùng
+        // Always show the last page
         if (totalPages > 1) addPage(totalPages);
     }
 

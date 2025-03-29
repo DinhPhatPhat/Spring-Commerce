@@ -18,4 +18,7 @@ public interface StoryRepository extends JpaRepository<Story, Integer> {
     List<Story> findAllByOrderByUpdatedAtDesc();
 
     Page<Story> findByTitleContainingIgnoreCase(String search, Pageable pageable);
+
+    Story findByMeta(String meta);
+
 }
