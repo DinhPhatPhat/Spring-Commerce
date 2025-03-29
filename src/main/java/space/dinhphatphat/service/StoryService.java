@@ -130,4 +130,8 @@ public class StoryService {
         return storyRepository.findByTitleContainingIgnoreCase(search, pageable);
     }
 
+    public void deleteById(int id) {
+        storyRepository.deleteById(id);
+    }
+
 }

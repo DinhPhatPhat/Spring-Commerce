@@ -40,8 +40,10 @@ public class StoryController {
             Story story = storyService.findById(id);
             if (story != null) {
                 model.addAttribute("story", story);
+                return "/story/updateStory";
             }
-            return "/story/updateStory";}
+            return "/story/notFound";
+        }
 
         return "redirect:/user/login";
     }
@@ -51,12 +53,13 @@ public class StoryController {
         Story story = storyService.findByMeta(meta);
         List<Story> top3Stories = storyService.findTop3ByOrderByCreatedAtDesc();
         if (story != null) {
+            String formattedContent = story.getContent().replace("\n", "<br>");
+            story.setContent(formattedContent);
             model.addAttribute("story", story);
             model.addAttribute("top3Stories", top3Stories);
             return "/story/readStory";
         }
         return "redirect:/";
-
     }
 
 }

@@ -14,6 +14,15 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
 
+    const deleteStoryBtn = document.getElementById("deleteStoryButton")
+    if(deleteStoryBtn) {
+        deleteStoryBtn.addEventListener('click', () => {
+            if(confirm("Bạn có chắc muốn xóa câu chuyện?")){
+                deleteStory()
+            }
+        })
+    }
+
 })
 
 function createStory(){
@@ -35,7 +44,10 @@ function createStory(){
         .then(response => {
             if (response.status === 201) {
                 showSuccess(response.data)
-                window.location.href = "/user"
+                setTimeout(() => {
+                    window.location.href = "/user"
+                }, 3000)
+
             } else {
                 console.log(response); // In ra để kiểm tra lỗi chi tiết
                 alert("Lỗi không xác định:\n" + JSON.stringify(response.data));
@@ -79,4 +91,16 @@ function updateStory(){
         });
 }
 
-
+function deleteStory() {
+    const id = document.getElementById("id").value
+    axios.delete(`/api/story/delete/${id}`)
+        .then(response => {
+            showSuccess(response.data)
+            setTimeout(() => {
+                window.location.href = "/user"
+            }, 3000)
+        })
+        .catch(error => {
+            showError(error.response.data)
+        })
+}

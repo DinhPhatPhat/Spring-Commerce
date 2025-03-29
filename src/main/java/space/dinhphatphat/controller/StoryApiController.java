@@ -75,8 +75,8 @@ public class StoryApiController {
         }
         try {
             story.setUser(user);
-            Story createdStory = storyService.create(story, image);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdStory);
+            storyService.create(story, image);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Câu chuyện của bạn đã được chia sẽ");
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Lỗi hệ thống, vui lòng thử lại sau");
@@ -115,6 +115,28 @@ public class StoryApiController {
             existingStory.setContent(story.getContent());
             storyService.update(existingStory, image);
             return ResponseEntity.status(HttpStatus.OK).body("Cập nhật thành công");
+        }
+        catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Lỗi hệ thống, vui lòng thử lại sau");
+        }
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteStory(@PathVariable int id, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Hãy đăng nhập");
+        }
+        Story existingStory = storyService.findById(id);
+        if (existingStory == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Không tìm thấy story");
+        }
+
+        if (user.getId() != existingStory.getUser().getId()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Truy cập trái phép");
+        }
+        try {
+            storyService.deleteById(id);
+            return  ResponseEntity.status(HttpStatus.OK).body("Đã xóa câu chuyện");
         }
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Lỗi hệ thống, vui lòng thử lại sau");
