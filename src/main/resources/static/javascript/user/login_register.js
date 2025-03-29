@@ -1,4 +1,6 @@
+
 document.addEventListener("DOMContentLoaded", () => {
+
     const registerBtn = document.getElementById('registerButton')
     if (registerBtn) {
         registerBtn.addEventListener('click', () => {
@@ -26,7 +28,9 @@ document.addEventListener("DOMContentLoaded", () => {
             submitLoginForm()
         })
     }
+
 })
+
 
 function submitRegisterForm() {
     const formData = new FormData;
@@ -44,32 +48,15 @@ function submitRegisterForm() {
     axios.post('/api/user/register', formData)
         .then(response => {
             if (response.status === 201) {
-                registerBtn.disabled = false
-                alert(`Tạo tài khoản thành công, vui lòng kiểm tra email ${response.data.email} để kích hoạt tài khoản`)
+                showSuccess(response.data)
             } else {
-                alert("Lỗi không xác định:\n" + response.data.join("\n"));
+                showError(response.data)
                 registerBtn.disabled = false
             }
         })
         .catch(error => {
             registerBtn.disabled = false
-            if(error.response.status === 400) {
-                const errors = error.response.data
-                if (Array.isArray(errors)) {
-                    alert("Dữ liệu không hợp lệ:\n" + errors.join("\n"));
-                } else {
-                    alert("Lỗi: " + errors);
-                }
-            }
-            else if (error.response.status === 409) {
-                alert("Email đã tồn tại, vui lòng đăng nhập")
-            }
-            else if (error.response.status === 500) {
-                alert("Lỗi server")
-            }
-            else {
-                alert('Error: ' + error.message)
-            }
+            showError(error.response.data)
         })
 }
 
@@ -86,12 +73,11 @@ function submitChangePasswordForm(){
         password2: password2
     })
         .then(response => {
-            changePasswordBtn.innerText = "Đổi mật khẩu thành công"
-            alert(response.data)
+            showSuccess(response.data)
         })
         .catch(error => {
+            showError(error.response.data)
             changePasswordBtn.disabled = false
-            alert(error.response.data)
         })
 }
 
@@ -108,10 +94,10 @@ function submitForgotPasswordForm() {
         params: { email: email }
     })
         .then(response => {
-            alert(response.data)
+            showSuccess(response.data)
         })
         .catch(error => {
-            alert(error.response.data)
+            showError(error.response.data)
         })
         .finally( () => {
             setTimeout( () => {
@@ -131,10 +117,9 @@ function submitLoginForm() {
     })
         .then(response => {
             window.location.href = "/user"
-            alert(response.data)
         })
         .catch(error => {
-            alert(error.response.data)
-            password.value = ""
+            showError(error.response.data)
+            password.value = "";
         })
 }

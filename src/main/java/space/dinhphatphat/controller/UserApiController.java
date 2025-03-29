@@ -6,12 +6,15 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import space.dinhphatphat.model.User;
 import space.dinhphatphat.service.TokenService;
 import space.dinhphatphat.service.UserService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,19 +31,19 @@ public class UserApiController {
     private TokenService tokenService;
 
     @PutMapping("update")
-    public ResponseEntity<?> update(@Validated User user,
+    public ResponseEntity<?> update(@Valid User user,
                                     BindingResult bindingResult
     ) {
-        if (bindingResult.hasErrors()) {
-            bindingResult.getAllErrors().forEach(error ->
-                    System.out.println("Validation error: " + error.getDefaultMessage()));
+        ResponseEntity<?> errorResponse = checkBindingResult(user, bindingResult);
+        if (errorResponse != null) {
+            return errorResponse;
         }
         try {
             User updatedUser = userService.update(user);
             return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
         }
         catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().body("Lỗi server");
         }
     }
 
@@ -73,23 +76,18 @@ public class UserApiController {
 
     @PostMapping("register")
     public ResponseEntity<?> register(@Validated @ModelAttribute User user, BindingResult bindingResult) {
-        // BindingResult store valid error, then log and return to front-end
-        if (bindingResult.hasErrors()) {
-            List<String> errors = bindingResult.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.toList());
-            return ResponseEntity.badRequest().body(errors);
+        ResponseEntity<?> errorResponse = checkBindingResult(user, bindingResult);
+        if (errorResponse != null) {
+            return errorResponse;
         }
-
         if(userService.existsByEmail(user.getEmail())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email đã tồn tại");
         }
-
         User createdUser = userService.create(user);
         if (createdUser == null) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.internalServerError().body("Lỗi server, thử lại sau");
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Tạo tài khoản thành công");
     }
 
     @PostMapping("forgot-password")
@@ -105,8 +103,6 @@ public class UserApiController {
         return ResponseEntity.badRequest().body("Email không tồn tại!");
     }
 
-
-
     @PostMapping("change-password")
     public ResponseEntity<?> changePassword(@RequestBody Map<String, String> body) {
 
@@ -116,8 +112,8 @@ public class UserApiController {
         if (email == null || email.trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email không tồn tại");
         }
-        if (password == null || password.trim().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mật khẩu không được bỏ trống");
+        if (password.length() < 6) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mật khẩu cần ít nhất 6 ký tự");
         }
         if (!password2.equals(password)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Mật khẩu không trùng khớp");
@@ -140,4 +136,17 @@ public class UserApiController {
         return ResponseEntity.ok().body("Đăng xuất thành công");
     }
 
+    private ResponseEntity<?> checkBindingResult(User user ,BindingResult bindingResult) {
+        // BindingResult store valid error, then log and return to front-end
+        if (bindingResult.hasErrors()) {
+            List<String> fieldOrder = List.of("name", "phoneNumber", "email", "password", "bio");
+            List<String> errors = bindingResult.getFieldErrors().stream()
+                    .sorted(Comparator.comparingInt(e -> fieldOrder.indexOf(e.getField())))
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList();
+
+            return ResponseEntity.badRequest().body(errors.get(0));
+        }
+        return null;
+    }
 }

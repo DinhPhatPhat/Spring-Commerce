@@ -34,7 +34,7 @@ function createStory(){
     })
         .then(response => {
             if (response.status === 201) {
-                alert('Chia sẽ bài viết thành công')
+                showSuccess(response.data)
                 window.location.href = "/user"
             } else {
                 console.log(response); // In ra để kiểm tra lỗi chi tiết
@@ -42,13 +42,7 @@ function createStory(){
             }
         })
         .catch(error => {
-            if (error.response) {
-                console.error("Chi tiết lỗi từ server:", error.response);
-                alert("Lỗi từ server: " + error.response.data.message || error.response.statusText);
-            } else {
-                console.error("Lỗi không có phản hồi từ server:", error);
-                alert("Lỗi không kết nối được đến server");
-            }
+            showError(error.response.data)
         });
 }
 
@@ -71,22 +65,18 @@ function updateStory(){
     })
         .then(response => {
             if (response.status === 200) {
-                alert(response.data)
-                location.reload()
+                showSuccess(response.data, 3000);
+                setTimeout(() => {
+                    location.reload();
+                }, 3000);
             } else {
                 console.log(response);
-                alert("Lỗi không xác định:\n" + JSON.stringify(response.data));
+                showError("Lỗi không xác định")
             }
         })
         .catch(error => {
-            if (error.response) {
-                console.error("Chi tiết lỗi từ server:", error.response);
-                alert("Lỗi từ server: " + error.response.data.message || error.response.statusText);
-            } else {
-                console.error("Lỗi không có phản hồi từ server:", error);
-                alert("Lỗi không kết nối được đến server");
-            }
+            showError(error.response.data)
         });
-
-
 }
+
+

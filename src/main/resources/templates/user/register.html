@@ -27,6 +27,7 @@
 
     <!-- JAVASCRIPT File -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script th:src="@{/javascript/alert.js}"></script>
     <script th:src="@{/javascript/user/login_register.js}"></script>
 
 </head>
@@ -50,23 +51,24 @@
     <div class="login-register">
         <form class="form-control" id="createHomeForm" enctype="multipart/form-data">
             <h3 class="form-title">Xin chào, người kể chuyện</h3>
-
-            <label class="form-label" for="name">Tên hiển thị:</label>
+            <div class="alert alert-danger" id="alert-failed"></div>
+            <div class="alert alert-success" id="alert-ok"></div>
+            <label class="form-label" for="name">Tên hiển thị</label>
             <input class="form-control" type="text" id="name" name="name" required><br>
 
-            <label class="form-label" for="phoneNumber">Số điện thoại:</label>
+            <label class="form-label" for="phoneNumber">Số điện thoại</label>
             <input class="form-control" type="text" id="phoneNumber" name="phoneNumber" required><br>
 
-            <label class="form-label" for="dateOfBirth">Ngày sinh:</label>
+            <label class="form-label" for="dateOfBirth">Ngày sinh</label>
             <input class="form-control" type="date" id="dateOfBirth" name="dateOfBirth" required><br>
 
-            <label class="form-label" for="bio">Tiểu sử:</label>
+            <label class="form-label" for="bio">Tiểu sử</label>
             <input class="form-control" type="text" id="bio" name="bio" required><br>
 
-            <label class="form-label" for="email">Email:</label>
+            <label class="form-label" for="email">Email</label>
             <input class="form-control" type="email" id="email" name="email" required><br>
 
-            <label class="form-label" for="password">Password:</label>
+            <label class="form-label" for="password">Password</label>
             <input class="form-control" type="password" id="password" name="password" required><br>
 
             <button class="btn login-register-btn" id="registerButton" type="button">Đăng ký</button>

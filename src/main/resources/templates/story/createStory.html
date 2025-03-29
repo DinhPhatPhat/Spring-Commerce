@@ -27,6 +27,7 @@
 
     <!-- JAVASCRIPT File -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script th:src="@{/javascript/alert.js}"></script>
     <script th:src="@{/javascript/story/create_update.js}"></script>
 
 </head>
@@ -46,7 +47,8 @@
         </nav>
     </div>
 </div><!-- End Page Title -->
-
+<div class="alert alert-danger" id="alert-failed"></div>
+<div class="alert alert-success" id="alert-ok"></div>
 <!-- Contact Section -->
 <section id="contact" class="contact section">
 

@@ -27,6 +27,7 @@
 
     <!-- JAVASCRIPT File -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script th:src="@{/javascript/alert.js}"></script>
     <script th:src="@{/javascript/story/create_update.js}"></script>
 
 </head>
@@ -47,12 +48,11 @@
     </div>
 </div><!-- End Page Title -->
 
-
+<div class="alert alert-danger" id="alert-failed"></div>
+<div class="alert alert-success" id="alert-ok"></div>
 <div class="container">
     <div class="row">
-
         <div class="col-lg-8">
-
             <!-- Blog Details Section -->
             <section id="blog-details" class="blog-details section">
                 <div class="container">
@@ -121,7 +121,6 @@
                         <h4 th:text="${story.getUser().getName()}"></h4>
                         <p th:text="${story.getUser().getBio()}">
                         </p>
-
                     </div>
                 </div><!--/Blog Author Widget -->
 

@@ -23,6 +23,5 @@ function logout (){
     axios.post('/api/user/logout')
         .then(response => {
             window.location.href = "/"
-            alert(response.data)
         })
 }

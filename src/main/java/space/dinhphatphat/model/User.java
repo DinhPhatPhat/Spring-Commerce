@@ -1,9 +1,7 @@
 package space.dinhphatphat.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -24,25 +22,28 @@ public class User {
     private int id;
 
     @Column(name = "name", columnDefinition = "VARCHAR(100) DEFAULT 'A friend' ")
-    @NotEmpty(message = "Tên không được bỏ trống")
+    @NotBlank(message = "Tên không được bỏ trống")
     private String name;
 
     @Column(name = "phone_number", columnDefinition = "CHAR(10)")
-    @Pattern(regexp = "^0[1-9][0-9]{8}$", message = "Số điện thoại không hợp lệ (phải có đúng 10 chữ số, bắt đầu bằng 0)")
+    @Pattern(regexp = "^0[1-9][0-9]{8}$", message = "Số điện thoại không hợp lệ")
     private String phoneNumber;
 
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
 
     @Column(name = "email", unique = true, nullable = false)
+    @NotBlank(message = "Email không được trống")
     @Email(message = "Email không hợp lệ")
     private String email;
 
     @Column(name = "password", nullable = false, columnDefinition = "VARCHAR(100)")
-    @NotEmpty(message = "Mật khẩu không được trống")
+    @NotBlank(message = "Mật khẩu không được trống")
+    @Size(min = 6, message = "Mật khẩu yêu cầu ít nhất 6 ký tự")
     private String password;
 
-    @Column(name = "bio", columnDefinition = "TEXT DEFAULT NULL")
+    @Column(name = "bio", columnDefinition = "VARCHAR(200) DEFAULT NULL")
+    @Size(max = 200, message = "Tiểu sử không được vượt quá 200 ký tự")
     private String bio;
 
     @Column(name ="image_path", columnDefinition = "DEFAULT NULL")

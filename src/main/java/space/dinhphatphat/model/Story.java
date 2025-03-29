@@ -1,6 +1,9 @@
 package space.dinhphatphat.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import java.text.Normalizer;
 import java.util.regex.Pattern;
@@ -24,10 +27,13 @@ public class Story {
     @JoinColumn(name = "user_id", referencedColumnName = "id", foreignKey = @ForeignKey(name = "fk_stories_to_users"))
     private User user; // Liên kết với bảng User
 
-    @Column(name = "title", nullable = false, length = 255)
+    @Column(name = "title", nullable = false, length = 255, columnDefinition = "VARCHAR(255) DEFAULT NULL")
+    @NotBlank(message = "Tiêu đề không được trống")
     private String title;
 
     @Column(name = "content", nullable = false, columnDefinition = "TEXT")
+    @NotBlank(message = "Nội dung không được trống")
+    @Size(min = 1000, message = "Câu chuyện quá ngắn (cần trên 1000 ký tự)")
     private String content;
 
     @Column(name = "meta", columnDefinition = "VARCHAR(255) DEFAULT '' ")

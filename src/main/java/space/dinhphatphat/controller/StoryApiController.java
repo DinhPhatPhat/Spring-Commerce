@@ -2,6 +2,7 @@ package space.dinhphatphat.controller;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import space.dinhphatphat.model.User;
 import space.dinhphatphat.service.StoryService;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,13 +65,9 @@ public class StoryApiController {
         if (user == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Hãy đăng nhập");
         }
-        // BindingResult store valid error, then log and return to front-end
-        if (bindingResult.hasErrors()) {
-            // Log validation
-            bindingResult.getAllErrors().forEach(error ->
-                    System.out.println("Validation error: " + error.getDefaultMessage())
-            );
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vui lòng nhập đầy đủ nội dung bài viết");
+        ResponseEntity<?> errorResponse = checkBindingResult(user, bindingResult);
+        if (errorResponse != null) {
+            return errorResponse;
         }
 
         if (image != null && image .getSize() > 3 * 1024 * 1024) {
@@ -86,7 +84,7 @@ public class StoryApiController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateStory(@Valid @ModelAttribute Story story, BindingResult bindingResult,
+    public ResponseEntity<?> updateStory(@Validated @ModelAttribute Story story, BindingResult bindingResult,
                                          @RequestParam(required = false) MultipartFile image ,
                                          HttpSession session) throws IOException {
 
@@ -95,13 +93,10 @@ public class StoryApiController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Hãy đăng nhập");
         }
 
-        // BindingResult store valid error, then log and return to front-end
-        if (bindingResult.hasErrors()) {
-            // Log validation
-            bindingResult.getAllErrors().forEach(error ->
-                    System.out.println("Validation error: " + error.getDefaultMessage())
-            );
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vui lòng nhập đầy đủ nội dung bài viết");
+        ResponseEntity<?> errorResponse = checkBindingResult(user, bindingResult);
+        if (errorResponse != null) {
+            System.out.println("Binding error");
+            return errorResponse;
         }
 
         Story existingStory = storyService.findById(story.getId());
@@ -124,5 +119,19 @@ public class StoryApiController {
         catch (Exception e) {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("Lỗi hệ thống, vui lòng thử lại sau");
         }
+    }
+
+    private ResponseEntity<?> checkBindingResult(User user ,BindingResult bindingResult) {
+        // BindingResult store valid error, then log and return to front-end
+        if (bindingResult.hasErrors()) {
+            List<String> fieldOrder = List.of("title", "content");
+            List<String> errors = bindingResult.getFieldErrors().stream()
+                    .sorted(Comparator.comparingInt(e -> fieldOrder.indexOf(e.getField())))
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList();
+
+            return ResponseEntity.badRequest().body(errors.get(0));
+        }
+        return null;
     }
 }
