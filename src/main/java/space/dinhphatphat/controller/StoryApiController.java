@@ -60,7 +60,7 @@ public class StoryApiController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createStory(@Valid @ModelAttribute Story story, BindingResult bindingResult, @RequestParam(required = false) MultipartFile image, HttpSession session) {
+    public ResponseEntity<?> createStory(@Validated @ModelAttribute Story story, BindingResult bindingResult, @RequestParam(required = false) MultipartFile image, HttpSession session) {
         User user = (User) session.getAttribute("user");
         if (user == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Hãy đăng nhập");
@@ -152,6 +152,7 @@ public class StoryApiController {
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .toList();
 
+            System.out.println(errors);
             return ResponseEntity.badRequest().body(errors.get(0));
         }
         return null;

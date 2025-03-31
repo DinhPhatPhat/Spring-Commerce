@@ -29,7 +29,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script th:src="@{/javascript/alert.js}"></script>
     <script th:src="@{/javascript/story/create_update.js}"></script>
-
+    <script th:src="@{/javascript/tinymce/tinymce.min.js}"></script>
 </head>
 <body>
 <!-- Header -->
@@ -68,7 +68,7 @@
                 </div>
                 <br>
 
-                <div class="info" th:if="${story}">
+                <div class="info">
                     <img th:src="${story.getImagePath() != null ? story.getImagePath() : '/image/story/default.jpg'}"
                          alt="Avatar" class="thumbnail">
                 </div>
@@ -88,7 +88,7 @@
                     </div>
 
                     <div class="form-group mt-3">
-                        <textarea class="form-control" name="content" id="content" placeholder="Nội dung" th:text="${story.getContent()}" spellcheck="false" required ></textarea>
+                        <textarea class="form-control" name="content" id="content" placeholder="Nội dung" th:text="${story.getContent()}" spellcheck="false"></textarea>
                     </div>
 
                     <div class="text-center"><button type="submit" id="updateStoryButton">Cập nhật câu chuyện</button></div>

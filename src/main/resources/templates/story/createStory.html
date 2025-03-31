@@ -22,13 +22,15 @@
 
     <!-- CSS File -->
     <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/user/profile.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/css/font/bee_vietnam_pro.css}">
 
     <!-- JAVASCRIPT File -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script th:src="@{/javascript/alert.js}"></script>
     <script th:src="@{/javascript/story/create_update.js}"></script>
+    <script th:src="@{/javascript/tinymce/tinymce.min.js}"></script>
+
+
 
 </head>
 <body>
@@ -82,7 +84,7 @@
                     </div>
 
                     <div class="form-group mt-3">
-                        <textarea class="form-control" name="content" id="content" placeholder="Nội dung" spellcheck="false" required></textarea>
+                        <textarea class="form-control" name="content" id="content" placeholder="Nội dung" spellcheck="false"></textarea>
                     </div>
 
                     <div class="text-center"><button type="submit" id="createStoryButton">Chia sẽ câu chuyện</button></div>

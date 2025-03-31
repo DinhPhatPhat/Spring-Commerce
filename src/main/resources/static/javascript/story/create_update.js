@@ -23,6 +23,25 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
 
+    tinymce.init({
+        selector: 'textarea#content',
+        menubar: 'file edit view',
+        height: 600,
+        promotion: false,
+        setup: function (editor) {
+            if(createStoryBtn) {
+                createStoryBtn.addEventListener("click", function () {
+                    editor.save()
+                })
+            }
+            if(updateStoryBtn) {
+                updateStoryBtn.addEventListener("click", function () {
+                    editor.save()
+                })
+            }
+        }
+    })
+
 })
 
 function createStory(){
@@ -49,13 +68,13 @@ function createStory(){
                 }, 3000)
 
             } else {
-                console.log(response); // In ra để kiểm tra lỗi chi tiết
-                alert("Lỗi không xác định:\n" + JSON.stringify(response.data));
+                console.log(response);
+                alert("Lỗi không xác định:\n" + JSON.stringify(response.data))
             }
         })
         .catch(error => {
             showError(error.response.data)
-        });
+        })
 }
 
 function updateStory(){
