@@ -10,6 +10,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import space.dinhphatphat.model.User;
 import space.dinhphatphat.service.TokenService;
 import space.dinhphatphat.service.UserService;
@@ -31,16 +32,31 @@ public class UserApiController {
     private TokenService tokenService;
 
     @PutMapping("update")
-    public ResponseEntity<?> update(@Valid User user,
-                                    BindingResult bindingResult
-    ) {
+    public ResponseEntity<?> update(@Validated(User.Update.class) @ModelAttribute User user,
+                                    BindingResult bindingResult, @RequestParam(required = false) MultipartFile image,
+                                    HttpSession httpSession) {
+
+        User logingUser = (User) httpSession.getAttribute("user");
+        if (logingUser == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Hãy đăng nhập");
+        }
+
         ResponseEntity<?> errorResponse = checkBindingResult(user, bindingResult);
         if (errorResponse != null) {
             return errorResponse;
         }
+
+        if (image != null && image .getSize() > 3 * 1024 * 1024) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("File ảnh cần bé hơn 3MB");
+        }
         try {
-            User updatedUser = userService.update(user);
-            return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+            logingUser.setName(user.getName());
+            logingUser.setPhoneNumber(user.getPhoneNumber());
+            logingUser.setDateOfBirth(user.getDateOfBirth());
+            logingUser.setBio(user.getBio());
+
+            userService.update(logingUser, image);
+            return ResponseEntity.status(HttpStatus.OK).body("Thông tin của bạn đã được cập nhật");
         }
         catch (Exception e) {
             return ResponseEntity.internalServerError().body("Lỗi server");
@@ -75,7 +91,7 @@ public class UserApiController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<?> register(@Validated @ModelAttribute User user, BindingResult bindingResult) {
+    public ResponseEntity<?> register(@Validated(User.Register.class) @ModelAttribute User user, BindingResult bindingResult) {
         ResponseEntity<?> errorResponse = checkBindingResult(user, bindingResult);
         if (errorResponse != null) {
             return errorResponse;
@@ -125,7 +141,7 @@ public class UserApiController {
         }
 
         user.setPassword(password);
-        userService.update(user);
+        userService.update(user, null);
         tokenService.deleteAllByUser_Id(user.getId());
         return ResponseEntity.ok().body("Mật khẩu đã được thay đổi, hãy quay về đăng nhập");
     }

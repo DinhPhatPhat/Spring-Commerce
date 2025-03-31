@@ -1,0 +1,41 @@
+package space.dinhphatphat.service;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+
+public class UploadService {
+
+    public static String upLoadImage(MultipartFile imageFile, int id, String uploadDir, String accessPath) throws IOException {
+
+        //Take file extension
+        String fileExtension = "";
+        // dot index
+        int dotIndex = imageFile.getOriginalFilename().lastIndexOf(".");
+        // Check if dot index exists, then take file extension by substring method
+        if (dotIndex > 0) {
+            fileExtension = imageFile.getOriginalFilename().substring(dotIndex);
+        }
+
+        //File name: <story id>.<file extension> (Ex: 1.png)
+        String fileName = id + fileExtension;
+        //Upload path
+        File uploadPath = new File(uploadDir);
+
+        // Make direct path if not exists
+        if (!uploadPath.exists()) {
+            uploadPath.mkdirs();
+        }
+
+        // Save file into path
+        Path destination = Path.of(uploadDir + fileName);
+
+        Files.copy(imageFile.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+
+        return accessPath + fileName;
+    }
+}

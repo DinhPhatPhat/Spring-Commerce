@@ -3,10 +3,16 @@ package space.dinhphatphat.service;
 import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import space.dinhphatphat.model.Token;
 import space.dinhphatphat.model.User;
 import space.dinhphatphat.repository.UserRepository;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -67,17 +73,17 @@ public class UserService {
         emailService.sendChangePasswordEmail(user.getEmail(), token);
     }
 
-    public User update(User user){
-        return userRepository.findById(user.getId())
-                .map(existingUser -> {
-                    existingUser.setName(user.getName());
-                    existingUser.setPhoneNumber(user.getPhoneNumber());
-                    existingUser.setDateOfBirth(user.getDateOfBirth());
-                    existingUser.setBio(user.getBio());
-
-                    return userRepository.save(existingUser);
-                })
-                .orElseThrow( () -> new RuntimeException("User not found"));
+    public User update(User user,MultipartFile image){
+        try{
+            if(image != null){
+                String imagePath = upLoadImage(image, user.getId());
+                user.setImagePath(imagePath);
+            }
+            return userRepository.save(user);
+        }
+        catch(Exception e){
+            return null;
+        }
     }
 
     public User findByEmailAndPassword(String email, String password){
@@ -111,4 +117,13 @@ public class UserService {
         }
         return 0;
     }
+
+    public String upLoadImage(MultipartFile imageFile, int userId) throws IOException {
+
+        String uploadDir = "uploads/image/user/";
+        String accessPath = "/uploads/image/user/";
+
+        return UploadService.upLoadImage(imageFile, userId, uploadDir, accessPath);
+    }
+
 }

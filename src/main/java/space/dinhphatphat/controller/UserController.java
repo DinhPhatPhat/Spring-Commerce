@@ -69,7 +69,7 @@ public class UserController {
         if(checkedToken != null){
             User user = checkedToken.getUser();
             user.setActive(true);
-            userService.update(user);
+            userService.update(user, null);
             model.addAttribute("user", user);
             tokenService.delete(checkedToken);
             return "/user/verify";

@@ -64,49 +64,13 @@ public class StoryService {
     }
 
     public String upLoadImage(MultipartFile imageFile, int storyId) throws IOException {
-        // Check the environment (Dev or Deploy)
         String uploadDir;
         String accessPath;
-        //If Dev
-//        if (new File("src/main/resources/static").exists()) {
-//            // Dev: resources/static/images/home/
-//            uploadDir = "src/main/resources/static/image/story/";
-//            accessPath = "/image/story/";
-//        }
-        //If Deploy
-//        else {
-            // Deploy: Outside direct (uploads/)
-            uploadDir = "uploads/image/story/";
-            accessPath = "/uploads/image/story/";
 
-//        }
+        uploadDir = "uploads/image/story/";
+        accessPath = "/uploads/image/story/";
 
-        //Take file extension
-        String fileExtension = "";
-        // dot index
-        int dotIndex = imageFile.getOriginalFilename().lastIndexOf(".");
-        // Check if dot index exists, then take file extension by substring method
-        if (dotIndex > 0) {
-            fileExtension = imageFile.getOriginalFilename().substring(dotIndex);
-        }
-
-        System.out.println("Story id" + storyId);
-        //File name: <story id>.<file extension> (Ex: 1.png)
-        String fileName = String.valueOf(storyId) + fileExtension;
-        //Upload path
-        File uploadPath = new File(uploadDir);
-
-        // Make direct path if not exists
-        if (!uploadPath.exists()) {
-            uploadPath.mkdirs();
-        }
-
-        // Save file into path
-        Path destination = Path.of(uploadDir + fileName);
-
-        Files.copy(imageFile.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
-
-        return accessPath + fileName;
+        return UploadService.upLoadImage(imageFile, storyId, uploadDir, accessPath);
     }
 
     public Story update(Story story, MultipartFile image) throws IOException {
