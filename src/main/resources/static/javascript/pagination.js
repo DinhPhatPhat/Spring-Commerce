@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const storiesContainer = document.querySelector(".row.gy-5");
-    const paginationContainer = document.querySelector(".pagination"); // Đảm bảo chọn <ul class="pagination">
+    const paginationContainer = document.querySelector(".pagination");
 
     const searchInput = document.getElementById("search-input");
     const searchButton = document.getElementById("search-button");

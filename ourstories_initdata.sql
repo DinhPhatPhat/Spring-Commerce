@@ -18,6 +18,7 @@ insert into ourstories.stories (title, content, user_id) values (
 "dsaads",
 1
 )
+select * from ourstories.comments
 
 delete from ourstories.users u where email = '52200010@student.tdtu.edu.vn'
 

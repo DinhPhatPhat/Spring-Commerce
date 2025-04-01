@@ -28,7 +28,7 @@
     <!-- JAVASCRIPT File -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script th:src="@{/javascript/alert.js}"></script>
-    <script th:src="@{/javascript/story/create_update.js}"></script>
+    <script th:src="@{/javascript/story/comment.js}"></script>
 
 </head>
 <body>
@@ -69,8 +69,7 @@
                                 <li class="d-flex align-items-center"><i class="bi bi-person"></i> <a href="#" th:text="${story.getUser().getName()}"></a></li>
                                 <li class="d-flex align-items-center"><i class="bi bi-clock"></i> <a href="#"><time
                                         th:text="${story.getUpdatedAt()}"></time></a></li>
-                                <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a href="#blog-comments">12
-                                    Comments</a></li>
+                                <li class="d-flex align-items-center"><i class="bi bi-chat-dots"></i> <a href="#blog-comments" th:text="${#lists.size(comments)} + ' bình luận'"></a></li>
                             </ul>
                         </div><!-- End meta top -->
 
@@ -86,22 +85,47 @@
 
             <!-- Blog Comments Section -->
             <section id="blog-comments" class="blog-comments section">
+                <div class="container">
 
+                    <h4 class="comments-count" th:text="${#lists.size(comments)} + ' bình luận'"></h4>
+
+                    <div th:id="${'comment-' + comment.getId()}" class="comment" th:each="comment : ${comments}">
+                        <div id="comment" class="d-flex">
+                            <div class="comment-img">
+                                <img th:src="@{${comment.getUser().getImagePath() != null ? comment.getUser().getImagePath() : '/image/user/default.jpg'}}">
+                            </div>
+                            <div>
+                                <h5>
+                                    <a href="#" th:text="${comment.user.name}">Tên người dùng</a>
+                                    <a class="deleteCommentButton"
+                                       th:if="${ user != null && comment.getUser().getId() == user.getId()}" th:data-id="${comment.getId()}">
+                                        <i class="bi bi-x"></i>
+                                    </a>
+                                </h5>
+                                <time th:datetime="${#dates.format(comment.createdAt, 'yyyy-MM-dd')}"
+                                      th:text="${#dates.format(comment.createdAt, 'dd MMM, yyyy')}">
+                                    01 Jan, 2022
+                                </time>
+                                <p th:text="${comment.content}" class="font-italic small"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section><!-- /Blog Comments Section -->
 
             <!-- Comment Form Section -->
             <section id="comment-form" class="comment-form section">
                 <div class="container">
-                    <form action="">
+                    <form onsubmit="return false">
                         <h4>Bình luận</h4>
                         <p>Hãy chia sẽ quan điểm của bạn </p>
                         <div class="row">
                             <div class="col form-group">
-                                <textarea name="comment" class="form-control" placeholder="Your Comment*"></textarea>
+                                <textarea name="content" id="content" class="form-control" placeholder="Your Comment*"></textarea>
                             </div>
                         </div>
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary">Bình luận</button>
+                            <button id="commentButton" type="submit" class="btn btn-primary">Bình luận</button>
                         </div>
                     </form>
 

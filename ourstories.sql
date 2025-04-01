@@ -38,7 +38,7 @@ CREATE TABLE comments (
     id  INT AUTO_INCREMENT PRIMARY KEY,
     story_id    INT NOT NULL,
     user_id INT NOT NULL,
-    content VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
     created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT fk_comments_to_stories FOREIGN KEY (story_id) REFERENCES stories(id) ON DELETE CASCADE,
     CONSTRAINT fk_comments_to_users FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE

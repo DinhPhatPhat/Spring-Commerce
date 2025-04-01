@@ -18,6 +18,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/user/login", "/api/user/register", "/api/user/forgot-password", "/api/user/change-password", "/api/user/logout", "/api/user/update").permitAll()
                         .requestMatchers("/api/story/**").permitAll()
+                        .requestMatchers("/api/comment/**").permitAll()
                         .requestMatchers("/user/login", "/user/register", "/user/forgot-password", "/user/change-password", "/user/verify").permitAll()
                         .requestMatchers("/story/**").permitAll()
                         .requestMatchers("/", "/info", "/user").permitAll()

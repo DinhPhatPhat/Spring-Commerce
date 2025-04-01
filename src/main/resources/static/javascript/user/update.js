@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
             reader.onload = (e) => {
                 const avatarPreview = document.getElementById("avatarPreview");
                 avatarPreview.src = e.target.result;
-                avatarPreview.onload = () => URL.revokeObjectURL(avatarPreview.src); // Giải phóng bộ nhớ
+                avatarPreview.onload = () => URL.revokeObjectURL(avatarPreview.src);
             };
             reader.readAsDataURL(file);
         }

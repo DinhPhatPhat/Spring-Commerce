@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import space.dinhphatphat.model.Comment;
 import space.dinhphatphat.model.Story;
 import space.dinhphatphat.model.User;
+import space.dinhphatphat.service.CommentService;
 import space.dinhphatphat.service.StoryService;
 
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ public class StoryController {
 
     @Autowired
     private StoryService storyService;
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/create")
     public String create(HttpSession session, Model model) {
@@ -49,14 +53,20 @@ public class StoryController {
     }
 
     @GetMapping("/{meta}")
-    public String readStory(Model model, @PathVariable String meta) {
+    public String readStory(Model model, @PathVariable String meta, HttpSession httpSession) {
         Story story = storyService.findByMeta(meta);
         List<Story> top3Stories = storyService.findTop3ByOrderByCreatedAtDesc();
         if (story != null) {
             String formattedContent = story.getContent().replace("\n", "<br>");
             story.setContent(formattedContent);
+            List<Comment> comments = commentService.findByStoryId(story.getId());
+            User user = (User) httpSession.getAttribute("user");
+            if (user != null) {
+                model.addAttribute("user", user);
+            }
             model.addAttribute("story", story);
             model.addAttribute("top3Stories", top3Stories);
+            model.addAttribute("comments", comments);
             return "/story/readStory";
         }
         return "redirect:/";

@@ -126,26 +126,9 @@
         </div>
         <br>
         <div class="row gy-5">
-<!--            <div class="col-lg-4 col-md-6" th:each="story : ${stories}">-->
-<!--                <article>-->
-<!--                    <div class="post-img">-->
-<!--                        <img th:src="@{${story.getImagePath() != null ? story.getImagePath() : '/image/story/default.jpg'}}" alt="" class="img-fluid thumbnail">-->
-<!--                    </div>-->
-<!--                    <div class="meta-top">-->
-<!--                        <ul>-->
-<!--                            <li class="d-flex align-items-center"><i class="bi bi-dot"></i>-->
-<!--                                <a th:href="@{/story/{id}(id=${story.getId()})}">-->
-<!--                                    <time th:text="${#dates.format(story.updatedAt, 'dd/MM/yyyy HH:mm')}" th:datetime="${#dates.format(story.getUpdatedAt(), 'dd/MM/yyyy HH:mm')}"></time>-->
-<!--                                </a>-->
-<!--                            </li>-->
-<!--                        </ul>-->
-<!--                    </div>-->
-<!--                    <h2 class="title">-->
-<!--                        <a th:href="@{/story/{id}(id=${story.getId()})}" th:text="${story.getTitle()}"></a>-->
-<!--                    </h2>-->
-<!--                </article>-->
-<!--            </div>&lt;!&ndash; End post list item &ndash;&gt;-->
-        </div><!-- End blog posts list -->
+            <!-- Stories will be added here by javascript-->
+        </div>
+
         <div class="pagination-container">
             <ul class="pagination blog-pagination section" id="pagination">
                 <!-- Pagination buttons will add here by javascript/pagination.js-->
