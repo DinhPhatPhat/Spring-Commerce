@@ -1,17 +1,19 @@
 package space.dinhphatphat.controller;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import space.dinhphatphat.model.User;
+import space.dinhphatphat.service.JwtService;
 import space.dinhphatphat.service.TokenService;
 import space.dinhphatphat.service.UserService;
 
@@ -19,7 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @RestController
 @Validated
@@ -30,13 +32,15 @@ public class UserApiController {
     private UserService userService;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    JwtService jwtService;
 
     @PutMapping("update")
     public ResponseEntity<?> update(@Validated(User.Update.class) @ModelAttribute User user,
                                     BindingResult bindingResult, @RequestParam(required = false) MultipartFile image,
-                                    HttpSession httpSession) {
+                                    HttpSession httpSession, @CookieValue(value = "token", required = false) String token) {
 
-        User logingUser = (User) httpSession.getAttribute("user");
+        User logingUser = userService.getCurrentUser(httpSession,token);
         if (logingUser == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Hãy đăng nhập");
         }
@@ -46,8 +50,8 @@ public class UserApiController {
             return errorResponse;
         }
 
-        if (image != null && image .getSize() > 3 * 1024 * 1024) {
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("File ảnh cần bé hơn 3MB");
+        if (image != null && image.getSize() > 2 * 1024 * 1024) {
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body("File ảnh cần bé hơn 2MB");
         }
         try {
             logingUser.setName(user.getName());
@@ -64,7 +68,8 @@ public class UserApiController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<?> login(@RequestBody Map<String, String> body, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody Map<String, String> body, HttpSession session,
+                                   HttpServletResponse response) {
         String email = body.get("email");
         String password = body.get("password");
 
@@ -83,9 +88,24 @@ public class UserApiController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Tài khoản chưa được kích hoạt, hãy kiểm tra email");
         }
         else {
-            // Save user to session, user exist (checked login)
+            // Login success
             User user = userService.findByEmail(email).get();
+
+            // Create session và save user information to session
             session.setAttribute("user", user);
+
+            // Create token JWT
+            String token = jwtService.generateToken(email);
+
+            // Save token to cookie
+            Cookie tokenCookie = new Cookie("token", token);
+            tokenCookie.setHttpOnly(true);
+            tokenCookie.setMaxAge(20 * 24 * 60 * 60); //20 days
+            tokenCookie.setSecure(true);  // Send cookie to HTTPS
+            tokenCookie.setPath("/");  // Apply for app
+
+            response.addCookie(tokenCookie);  // Add cookie to response
+
             return ResponseEntity.ok("Đăng nhập thành công");
         }
     }
@@ -103,7 +123,7 @@ public class UserApiController {
         if (createdUser == null) {
             return ResponseEntity.internalServerError().body("Lỗi server, thử lại sau");
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body("Tạo tài khoản thành công");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Tạo tài khoản thành công, kiểm tra email để kích hoạt");
     }
 
     @PostMapping("forgot-password")
@@ -147,8 +167,17 @@ public class UserApiController {
     }
 
     @PostMapping("logout")
-    public ResponseEntity<String> logout(HttpSession session) {
+    public ResponseEntity<String> logout(HttpSession session, HttpServletResponse response) {
+        // Delete session
         session.invalidate();
+        // Delete cookie
+        Cookie cookie = new Cookie("token", null);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        cookie.setSecure(true);
+
+        response.addCookie(cookie);
         return ResponseEntity.ok().body("Đăng xuất thành công");
     }
 

@@ -31,24 +31,40 @@ document.addEventListener("DOMContentLoaded", () => {
 
 })
 
-
 function submitRegisterForm() {
     const formData = new FormData;
     const registerBtn = document.getElementById('registerButton')
 
     registerBtn.disabled = true
 
-    formData.append('name',document.getElementById('name').value)
-    formData.append('phoneNumber',document.getElementById('phoneNumber').value)
-    formData.append('dateOfBirth',document.getElementById('dateOfBirth').value)
-    formData.append('bio',document.getElementById('bio').value)
-    formData.append('email',document.getElementById('email').value)
-    formData.append('password',document.getElementById('password').value)
+    const name = document.getElementById('name').value
+    const phoneNumber = document.getElementById('phoneNumber').value
+    const dateOfBirth = document.getElementById('dateOfBirth').value
+    const bio = document.getElementById('bio').value
+    const email = document.getElementById('email').value
+    const password = document.getElementById('password').value
+
+    if (!checkNamePhoneNumber(name, phoneNumber)) {
+        registerBtn.disabled = false;
+        return;
+    }
+
+    if (!checkEmailPassword(email, password)) {
+        registerBtn.disabled = false;
+        return;
+    }
+
+    formData.append('name', name);
+    formData.append('phoneNumber', phoneNumber);
+    formData.append('dateOfBirth', dateOfBirth);
+    formData.append('bio', bio);
+    formData.append('email', email);
+    formData.append('password', password);
 
     axios.post('/api/user/register', formData)
         .then(response => {
             if (response.status === 201) {
-                showSuccess(response.data)
+                showSuccess(response.data, 30000)
             } else {
                 showError(response.data)
                 registerBtn.disabled = false
@@ -65,6 +81,13 @@ function submitChangePasswordForm(){
     const password = document.getElementById('password').value;
     const password2 = document.getElementById('password2').value;
 
+    if (!checkEmailPassword(email, password)) {
+        return;
+    }
+    if (password !== password2) {
+        showError("Mật khẩu xác nhận chưa đúng")
+        return
+    }
     const changePasswordBtn = document.getElementById('changePasswordButton');
     changePasswordBtn.disabled = true
     axios.post('/api/user/change-password', {
@@ -111,6 +134,9 @@ function submitLoginForm() {
     const email = document.getElementById('email').value
     const password = document.getElementById('password').value
 
+    if(!checkEmailPassword(email,password)){
+        return
+    }
     axios.post('/api/user/login', {
         email: email,
         password: password
@@ -122,4 +148,38 @@ function submitLoginForm() {
             showError(error.response.data)
             password.value = "";
         })
+}
+
+function checkNamePhoneNumber(name, phoneNumber) {
+    if (name.trim() === '') {
+        showError('Tên không được bỏ trống')
+        return false
+    }
+
+    const phoneRegex = /^0[1-9][0-9]{8}$/
+    if (!phoneRegex.test(phoneNumber)) {
+        showError('Số điện thoại không hợp lệ')
+        return false
+    }
+    return true
+}
+
+function checkEmailPassword(email, password) {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+    if (email.trim() === '') {
+        showError('Email không được trống')
+        return false
+    } else if (!emailRegex.test(email)) {
+        showError('Email không hợp lệ')
+        return false
+    }
+
+    if (password.trim() === '') {
+        showError('Mật khẩu không được trống')
+        return false
+    } else if (password.length < 6) {
+        showError('Mật khẩu yêu cầu ít nhất 6 ký tự')
+        return false
+    }
+    return true
 }

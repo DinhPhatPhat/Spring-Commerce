@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: .  # Dùng Dockerfile trong thư mục hiện tại
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: springcommerce_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+    volumes:
+      - ./mysql-init:/docker-entrypoint-initdb.d
+    depends_on:
+      - mydb
+    networks:
+      - spring_commerce-network
+
+  mydb:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: springcommerce_db
+    ports:
+      - "3307:3306"  # Đổi port tránh trùng nếu máy host đã chạy MySQL
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - spring_commerce-network
+
+volumes:
+  uploads-data:
+  db-data:
+
+networks:
+  spring_commerce-network:
+    driver: bridge

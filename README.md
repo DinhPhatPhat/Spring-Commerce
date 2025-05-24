@@ -1,4 +1,4 @@
-# OurStories
+# Spring Commerce
 
 OurStories is a web application that allows users to share and explore personal stories.
 
@@ -21,19 +21,19 @@ OurStories is a web application that allows users to share and explore personal 
 
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/DinhPhatPhat/Our-stories.git
+   git clone https://github.com/DinhPhatPhat/Spring-Commerce.git
    ```
 2. Configure the database in `application.properties`:  
    ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/ourstories
+   spring.datasource.url=jdbc:mysql://localhost:3306/springcommerce_db
    spring.datasource.username=root
-   spring.datasource.password=yourpassword
+   spring.datasource.password=root
    ```
 3. Run the application:  
    ```bash
    mvn spring-boot:run
    ```
-4. Open `http://localhost:8080` in your browser.
+4. Open `http://localhost:8081` in your browser.
 
 ## Contributing
 

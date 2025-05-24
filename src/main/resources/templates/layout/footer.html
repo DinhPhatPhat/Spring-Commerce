@@ -1,44 +1,37 @@
 <footer th:fragment="footer" id="footer" class="footer light-background">
     <div class="container">
         <div class="row g-4">
-            <div class="col-md-6 col-lg-3 mb-3 mb-md-0">
+            <div class="col-md-6 col-lg-4 mb-3 mb-md-0">
                 <div class="widget">
                     <h3 class="widget-heading">Thông tin</h3>
                     <p class="mb-4">
-                        ourstories.space là nơi bạn quyết định không dành
-                        những câu chuyện, sự suy tư trong sống cho riêng bạn và muốn chia sẽ nó.
+                        Mầm xanh là nơi mang đến cho không gian sống của bạn sự tươi mát và thanh lịch.
                     </p>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3 ps-lg-5 mb-3 mb-md-0">
+            <div class="col-md-6 col-lg-4 ps-lg-5 mb-3 mb-md-0">
                 <div class="widget">
-                    <h3 class="widget-heading">Khám phá những câu chuyện</h3>
+                    <h3 class="widget-heading">Khám phá Mầm xanh</h3>
                     <ul class="list-unstyled float-start me-5">
-                        <li><a href="/">Our stories</a></li>
+                        <li><a href="/">Trang chủ</a></li>
                         <li><a href="/info">Thông tin trang web</a></li>
                         <li><a href="/user">Tài khoản</a></li>
+                        <li><a href="/cart">Giỏ hàng</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="col-md-6 col-lg-3 pl-lg-5">
+            <div class="col-md-6 col-lg-4 pl-lg-5">
                 <div class="widget">
-                    <h3 class="widget-heading">Bài viết gần nhất</h3>
-                    <ul class="list-unstyled footer-blog-entry"  id="footer-stories">
-                    </ul>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3 pl-lg-5">
-                <div class="widget">
-                    <h3 class="widget-heading">Contact to Phat</h3>
+                    <h3 class="widget-heading">Contact to Mầm xanh</h3>
                     <ul class="list-unstyled social-icons light mb-3">
                         <li>
-                            <a href="https://www.facebook.com/phatfioraa"><span class="bi bi-facebook"></span></a>
+                            <a href="https://www.facebook.com/phatfioraa" target="_blank"><span class="bi bi-facebook"></span></a>
                         </li>
                         <li>
-                            <a href="https://www.instagram.com/phatphatdinh/"><span class="bi bi-instagram"></span></a>
+                            <a href="https://www.instagram.com/phatphatdinh/" target="_blank"><span class="bi bi-instagram"></span></a>
                         </li>
                         <li>
-                            <a href="https://www.linkedin.com/in/phát-phát-đinh-8b4016352"><span class="bi bi-linkedin"></span></a>
+                            <a href="https://www.linkedin.com/in/phát-phát-đinh-8b4016352" target="_blank"><span class="bi bi-linkedin"></span></a>
                         </li>
                     </ul>
                 </div>
@@ -49,33 +42,5 @@
             <p>© <span>Copyright</span> <strong class="px-1 sitename">Dinh Phat Phat</strong> <span>All Rights Reserved</span></p>
         </div>
     </div>
-
-    <script>
-        fetch('/api/story/find-top-3-stories')
-            .then(response => response.json())
-            .then(data => {
-                let html = '';
-                data.forEach(story => {
-                    let createdAt = new Date(story.createdAt).toLocaleString('vi-VN', {
-                        day: '2-digit',
-                        month: '2-digit',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-
-                    html += `
-                <li>
-                    <span class="d-block date">${createdAt}</span>
-                    <a href="/story/${story.id}">${story.title}</a>
-                </li>
-                `;
-                });
-                document.getElementById('footer-stories').innerHTML = html;
-            })
-            .catch(error => console.error('Lỗi tải dữ liệu:', error));
-    </script>
-
-
 
 </footer>

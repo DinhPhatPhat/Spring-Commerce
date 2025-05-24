@@ -16,20 +16,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/user/login", "/api/user/register", "/api/user/forgot-password", "/api/user/change-password", "/api/user/logout", "/api/user/update").permitAll()
-                        .requestMatchers("/api/story/**").permitAll()
-                        .requestMatchers("/api/comment/**").permitAll()
-                        .requestMatchers("/user/login", "/user/register", "/user/forgot-password", "/user/change-password", "/user/verify").permitAll()
-                        .requestMatchers("/story/**").permitAll()
-                        .requestMatchers("/", "/info", "/user").permitAll()
-                        .requestMatchers("/css/**", "/javascript/**", "/image/**", "/vendor/**" ).permitAll()
-                        .requestMatchers("/uploads/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/**").permitAll()  // Cho phép tất cả các yêu cầu
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 )
-                .csrf(AbstractHttpConfigurer::disable);
+                .csrf(AbstractHttpConfigurer::disable);  // Tắt CSRF nếu không dùng
 
         return http.build();
     }

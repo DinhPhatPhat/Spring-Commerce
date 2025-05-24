@@ -41,19 +41,29 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     })
-
 })
 
-function createStory(){
+async function createStory() {
 
     const formData = new FormData()
-    const createStoryBtn = document.getElementById("createStoryButton")
+    tinymce.get('content').save()
 
-    formData.append("title",document.getElementById("title").value)
-    formData.append("content", document.getElementById('content').value)
+    const title = document.getElementById("title").value
+    const content = document.getElementById('content').value
+
+    if (!checkTitleContent(title, content)) {
+        return
+    }
+    formData.append("title", title)
+    formData.append("content", content)
+
     const storyImage = document.getElementById('storyImage').files[0]
     if (storyImage != null) {
-        formData.append('image', storyImage);
+        if (!validateImage(storyImage)) {
+            return
+        }
+        const compressedBlob = await compressToWebp(storyImage, 0.7)
+        formData.append("image", compressedBlob, "compressed.webp")
     }
     axios.post('/api/story/create', formData, {
         headers: {
@@ -77,16 +87,28 @@ function createStory(){
         })
 }
 
-function updateStory(){
+async function updateStory(){
     const formData = new FormData()
+    tinymce.get('content').save()
 
+    const title = document.getElementById("title").value
+    const content = document.getElementById("content").value
+
+    formData.append("title", title)
+    formData.append("content", content)
+
+    if(!checkTitleContent(title,content)){
+        return
+    }
     formData.append("id",document.getElementById("id").value)
-    formData.append("title", document.getElementById("title").value)
-    formData.append("content", document.getElementById("content").value)
 
     const storyImage = document.getElementById('storyImage').files[0]
     if (storyImage != null) {
-        formData.append('image', storyImage);
+        if(!validateImage(storyImage)){
+            return
+        }
+        const compressedBlob = await compressToWebp(storyImage, 0.7)
+        formData.append("image", compressedBlob, "compressed.webp")
     }
 
     axios.put('/api/story/update', formData, {
@@ -122,4 +144,62 @@ function deleteStory() {
         .catch(error => {
             showError(error.response.data)
         })
+}
+
+function checkTitleContent(title, content) {
+    if (title === "") {
+        showError("Tiêu đề không được trống")
+        return false;
+    }
+
+    if (content === "") {
+        showError("Nội dung không được trống")
+        return false;
+    }
+
+    if (content.length < 1000) {
+        showError("Câu chuyện quá ngắn (cần trên 1000 ký tự)")
+        return false;
+    }
+    return true;
+}
+
+function validateImage(file) {
+    const maxFileSize = 5 * 1024 * 1024
+    if (file.size > maxFileSize) {
+        showError('Ảnh phải nhỏ hơn 5MB')
+        return false
+    }
+    return true
+}
+
+function compressToWebp(file, quality = 0.7, maxWidth = 1000) {
+    return new Promise((resolve) => {
+        const reader = new FileReader()
+        reader.onload = function (event) {
+            const img = new Image()
+            img.onload = function () {
+                const canvas = document.createElement('canvas')
+                const ctx = canvas.getContext('2d')
+
+                let width = img.width
+                let height = img.height
+
+                if (width > maxWidth) {
+                    height = height * (maxWidth / width)
+                    width = maxWidth
+                }
+
+                canvas.width = width
+                canvas.height = height
+                ctx.drawImage(img, 0, 0, width, height)
+
+                canvas.toBlob((blob) => {
+                    resolve(blob)
+                }, 'image/webp', quality)
+            }
+            img.src = event.target.result
+        }
+        reader.readAsDataURL(file)
+    })
 }

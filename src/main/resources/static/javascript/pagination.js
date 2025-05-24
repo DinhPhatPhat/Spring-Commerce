@@ -2,49 +2,63 @@ document.addEventListener("DOMContentLoaded", function () {
     const storiesContainer = document.querySelector(".row.gy-5");
     const paginationContainer = document.querySelector(".pagination");
 
-    const searchInput = document.getElementById("search-input");
+    const categorySelect = document.getElementById("category-select");
+    const nameInput = document.getElementById("name-input");
+    const brandInput = document.getElementById("brand-input");
+    const colorInput = document.getElementById("color-input");
     const searchButton = document.getElementById("search-button");
 
     let currentPage = 1;
-    let currentSearch = "";
 
-    function fetchStories(page = 1, search = "") {
-        axios.get("/api/story", {
-            params: { page, search }
-        })
+    // Load danh mục để chèn vào select
+    axios.post("/api/category/findAll")
+        .then(res => {
+            res.data.forEach(c => {
+                const option = document.createElement("option");
+                option.value = c.id;
+                option.textContent = c.name;
+                categorySelect.appendChild(option);
+            });
+        });
+
+    function fetchProducts(page = 1) {
+        const params = {
+            page,
+            categoryId: categorySelect.value || null,
+            name: nameInput.value.trim() || null,
+            brand: brandInput.value.trim() || null,
+            color: colorInput.value.trim() || null
+        };
+
+        axios.get("/api/product", { params })
             .then(response => {
-                const { stories, totalPages } = response.data;
-                renderStories(stories);
+                const { products, totalPages } = response.data;
+                renderProducts(products);
                 renderPagination(totalPages, page);
             })
             .catch(error => console.error("Lỗi tải dữ liệu:", error));
     }
 
-    function renderStories(stories) {
-        storiesContainer.innerHTML = stories.map(story => `
+    function renderProducts(products) {
+        storiesContainer.innerHTML = products.map(p => `
             <div class="col-lg-4 col-md-6">
                 <article>
                     <div class="post-img">
-                        <a href="/story/${story.meta}">
-                            <img src="${story.imagePath || '/image/story/default.jpg'}" alt="" class="img-fluid thumbnail">
+                        <a href="/product/${p.id}">
+                            <img src="${p.imagePath || '/image/product/default.png'}" alt="" class="img-fluid thumbnail">
                         </a>
                     </div>
                     <div class="meta-top">
                         <ul>
-                            <li class="d-flex align-items-center"><i class="bi bi-dot"></i>
-                                <a href="/story/${story.meta}">
-                                   ${story.user.name}
-                                </a>
-                            </li>
-                            <li class="d-flex align-items-center"><i class="bi bi-dot"></i>
-                                <a href="/story/${story.meta}">
-                                    <time datetime="${story.updatedAt}">${formatDate(story.updatedAt)}</time>
-                                </a>
-                            </li>
+                            <li><i></i> ${p.brand || "Không rõ"}</li>
+                            <br>
+                            <li><i class="bi bi-dot"></i> ${p.color || "Không rõ"}</li>
+                            <br>
+                            <li><i class="bi bi-dot"></i> ${p.price|| "Không rõ"} VNĐ</li>
                         </ul>
                     </div>
                     <h2 class="title">
-                        <a href="/story/${story.meta}">${story.title}</a>
+                        <a href="/product/${p.id}">${p.name}</a>
                     </h2>
                 </article>
             </div>
@@ -61,26 +75,28 @@ document.addEventListener("DOMContentLoaded", function () {
             const a = document.createElement("a");
             a.href = "#";
             a.textContent = page;
-            a.className = page === currentPage ? "active" : "";
+            a.className = "page-link" + (page === currentPage ? " active" : "");
             a.addEventListener("click", (e) => {
                 e.preventDefault();
                 if (currentPage !== page) {
                     currentPage = page;
-                    fetchStories(currentPage, currentSearch);
+                    fetchProducts(currentPage);
                 }
             });
             li.appendChild(a);
             paginationContainer.appendChild(li);
         };
 
-        // Always show the first page
         if (totalPages > 1) addPage(1);
 
         let startPage = Math.max(2, currentPage - Math.floor(maxVisiblePages / 2));
         let endPage = Math.min(totalPages - 1, currentPage + Math.floor(maxVisiblePages / 2));
 
         if (startPage > 2) {
-            paginationContainer.appendChild(document.createTextNode("..."));
+            const dots = document.createElement("li");
+            dots.className = "page-item disabled";
+            dots.innerHTML = `<span class="page-link">...</span>`;
+            paginationContainer.appendChild(dots);
         }
 
         for (let i = startPage; i <= endPage; i++) {
@@ -88,30 +104,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (endPage < totalPages - 1) {
-            paginationContainer.appendChild(document.createTextNode("..."));
+            const dots = document.createElement("li");
+            dots.className = "page-item disabled";
+            dots.innerHTML = `<span class="page-link">...</span>`;
+            paginationContainer.appendChild(dots);
         }
 
-        // Always show the last page
         if (totalPages > 1) addPage(totalPages);
     }
 
-
-
-
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`;
-    }
-
     searchButton.addEventListener("click", () => {
-        currentSearch = removeVietnameseTones(searchInput.value.trim());
         currentPage = 1;
-        fetchStories(currentPage, currentSearch);
+        fetchProducts(currentPage);
     });
 
-    fetchStories();
-
-    function removeVietnameseTones(str) {
-        return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
-    }
+    fetchProducts(currentPage); // Lần đầu load
 });

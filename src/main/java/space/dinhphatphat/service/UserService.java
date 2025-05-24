@@ -1,6 +1,6 @@
 package space.dinhphatphat.service;
 
-import lombok.Value;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -8,20 +8,17 @@ import space.dinhphatphat.model.Token;
 import space.dinhphatphat.model.User;
 import space.dinhphatphat.repository.UserRepository;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService {
 
-    private final EmailService emailService;
-
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private JwtService jwtService;
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -125,5 +122,31 @@ public class UserService {
 
         return UploadService.upLoadImage(imageFile, userId, uploadDir, accessPath);
     }
+
+    public User getCurrentUser(HttpSession session, String token) {
+        // Check session
+        User userFromSession = (User) session.getAttribute("user");
+        if (userFromSession != null) {
+            return userFromSession;
+        }
+
+        // If session is not exists, then check cookie
+        if (token != null && jwtService.isTokenValid(token)) {
+            // Encrypt email from token
+            String email = jwtService.extractEmail(token);
+            if (email != null) {
+                // Take user from email
+                User user = userRepository.findByEmail(email).orElse(null);
+                // If user found, create session
+                if (user != null) {
+                    session.setAttribute("user", user);  // Create session
+                    return user;
+                }
+            }
+        }
+        // If session and cookie are not exist, then return null
+        return null;
+    }
+
 
 }

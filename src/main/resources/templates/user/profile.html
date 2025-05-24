@@ -50,7 +50,7 @@
         <h1>Thông tin</h1>
         <nav class="breadcrumbs">
             <ol>
-                <li><a href="/">ourstories.space</a></li>
+                <li><a href="/">Mầm xanh</a></li>
                 <li class="current">Thông tin</li>
             </ol>
         </nav>
@@ -68,7 +68,7 @@
                 <div class="alert alert-success" id="alert-ok"></div>
                 <div class="info text-center">
                     <img id="avatarPreview" th:src="@{${user.getImagePath() != null ? user.getImagePath() : '/image/user/default.jpg'}}"
-                         alt="Avatar" class="avatar">
+                         alt="Avatar" class="avatar" loading="lazy">
                     <br>
                     <input type="file" id="avatarInput" accept="image/*" style="display: none;">
                     <button id="changeAvatarButton" class="btn btn-close-white"><i class="bi bi-pencil flex-shrink-0"> Cập nhật avatar</i></button>
@@ -76,8 +76,9 @@
                     <h3 id="email" th:text="${user.getEmail()}"></h3>
                     <button id="logoutButton" class="btn btn-close-white"><i class="bi bi-arrow-return-left flex-shrink-0"> Đăng xuất</i></button>
                 </div>
-                <p class="mt-5" data-aos="fade-up">
-                    <a href="/story/create" class="btn btn-get-started"><i class="bi bi-book-fill flex-shrink-0"> Viết một câu chuyện</i></a>
+                <p class="mt-5" data-aos="fade-up" th:if="${user != null and user.role == 1}">
+                    <a href="/category/create" class="btn btn-get-started"><i class="bi bi-list flex-shrink-0"> Thêm danh mục</i></a>
+                    <a href="/product/create" class="btn btn-get-started"><i class="bi bi-tree flex-shrink-0"> Thêm sản phẩm</i></a>
                 </p>
             </div>
 
@@ -112,29 +113,80 @@
         </div>
     </div>
 
-    <div class="container">
-        <table id="storyTable" class="hover">
+    <div class="container mb-5" th:if="${user != null and user.role == 1}">
+        <table id="categoryTable" class="hover">
             <thead>
             <tr>
-                <th>Tiêu đề</th>
-                <th>Ngày tạo</th>
-                <th>Cập nhật gần nhất</th>
+                <th>Mã danh mục</th>
+                <th>Tên danh mục</th>
                 <th>Thao tác</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="story : ${stories}">
-                <td th:text="${story.title}"></td>
-                <td th:text="${#dates.format(story.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
-                <td th:text="${#dates.format(story.updatedAt, 'dd/MM/yyyy HH:mm')}"></td>
+            <tr th:each="category : ${categories}">
+                <td><a th:href="@{/category/update/{id}(id=${category.id})}" th:text="${category.getId()}"></a></td>
+                <td><a th:href="@{'/category/' + ${category.getName()}}" th:text="${category.getName()}"></a></td>
                 <td>
-                    <a th:href="@{/story/update/{id}(id=${story.id})}" class="btn-edit">Chỉnh sửa</a>
+                    <a th:href="@{/category/update/{id}(id=${category.id})}" class="btn-edit">Quản lý danh mục - sản phẩm</a>
+                    <br>
                 </td>
             </tr>
             </tbody>
         </table>
-
     </div>
+
+    <div class="container mb-5">
+        <table id="orderTable" class="hover table table-bordered">
+            <thead>
+            <tr>
+                <th>Mã đơn hàng</th>
+                <th>Ngày đặt hàng</th>
+                <th>Mã khách hàng</th>
+                <th>Tên người nhận</th>
+                <th>Số điện thoại</th>
+                <th>Địa chỉ</th>
+                <th>Chi tiết</th>
+                <th>Tình trạng</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}"></td>
+                <td th:text="${#dates.format(order.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${order.user.id}"></td>
+                <td th:text="${order.recipientName}"></td>
+                <td th:text="${order.recipientPhoneNumber}"></td>
+                <td th:text="${order.shippingAddress}"></td>
+                <td>
+                    <ul>
+                        <li th:each="item : ${order.orderItems}">
+                            <span class="ml-1">
+                                <div class="row" th:text="${item.product.name}"></div>
+                                <div class="row" th:text="${item.quantity} + ' x ' + ${item.price}"></div>
+                            </span>
+
+                        </li>
+                    </ul>
+                </td>
+                <td>
+                    <th:block th:if="${user.role == 1}">
+                        <select class="form-select order-status-select" th:attr="data-id=${order.id}">
+                            <option value="ĐANG CHUẨN BỊ" th:selected="${order.status == 'ĐANG CHUẨN BỊ'}">ĐANG CHUẨN BỊ</option>
+                            <option value="ĐANG GIAO" th:selected="${order.status == 'ĐANG GIAO'}">ĐANG GIAO</option>
+                            <option value="ĐÃ GIAO" th:selected="${order.status == 'ĐÃ GIAO'}">ĐÃ GIAO</option>
+                            <option value="TRẢ HÀNG" th:selected="${order.status == 'TRẢ HÀNG'}">TRẢ HÀNG</option>
+                        </select>
+                    </th:block>
+                    <th:block th:if="${user.role != 1}">
+                        <span th:text="${order.status}"></span>
+                    </th:block>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
 
 </section><!-- /Contact Section -->
 

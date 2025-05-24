@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mầm xanh - Sản phẩm</title>
+    <link rel="icon" type="image/png" th:href="@{/favicon.png}">
+    <!--  Font Be Vietnam Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Vendor Active Template CSS Files -->
+    <link th:href="@{/vendor/active_vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/aos/aos.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
+
+    <!-- Main Active Template CSS File -->
+    <link th:href="@{/css/active_css/main.css}" rel="stylesheet">
+
+    <!-- CSS File -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font/bee_vietnam_pro.css}">
+
+    <!-- JAVASCRIPT File -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script th:src="@{/javascript/alert.js}"></script>
+    <script th:src="@{/javascript/product/show.js}"></script>
+
+</head>
+<body>
+<!-- Header -->
+<div th:replace="~{layout/header :: header}"></div>
+<div class="alert alert-danger" id="alert-failed"></div>
+<div class="alert alert-success" id="alert-ok"></div>
+<!-- Page Title -->
+<div class="page-title light-background">
+    <div class="container">
+        <h1>Sản phẩm</h1>
+        <nav class="breadcrumbs">
+            <ol>
+                <li><a href="/">Mầm xanh</a></li>
+                <li class="current">Sản phẩm</li>
+            </ol>
+        </nav>
+    </div>
+</div><!-- End Page Title -->
+
+<!-- About 2 Section -->
+<section id="about-2" class="about-2 section">
+
+    <div class="container">
+        <div class="content">
+            <div class="row justify-content-center">
+                <div class="col-sm-12 col-md-5 col-lg-4 col-xl-4 order-lg-2 offset-xl-1 mb-4">
+                    <divth class="img-wrap text-center text-md-left" data-aos="fade-up" data-aos-delay="100">
+                        <div class="img">
+                            <img th:src="@{${product.getImagePath() != null ? product.getImagePath() : '/image/product/default.png'}}" alt="circle image" class="img-fluid" loading="lazy">
+                        </div>
+                    </divth>
+                </div>
+
+                <div class="offset-md-0 offset-lg-1 col-sm-12 col-md-5 col-lg-5 col-xl-4" data-aos="fade-up">
+                    <div class="px-3">
+                        <input type="hidden" th:value="${product.getId()}" id="id">
+                        <h2 class="content-title text-start" th:text="${product.getName()}">
+                        </h2>
+                        <span class="content-subtitle" th:text="'Thương hiệu: ' + ${product.getBrand()}"></span>
+                        <span class="content-subtitle" th:text="'Màu sắc: ' + ${product.getColor()}"></span>
+                        <span class="content-subtitle" th:text="'Mô tả: ' + ${product.getDescription()}"></span>
+                        <div th:text="${product.getPrice()} + ' VNĐ'"></div>
+                        <p class="mt-5" data-aos="fade-up">
+                            <a class="btn btn-get-started" id="addToCartButton">Thêm vào giỏ hàng</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section><!-- /About 2 Section -->
+
+<!-- Footer -->
+<div th:replace="~{layout/footer :: footer}"></div>
+
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+<!-- Preloader -->
+<div id="preloader"></div>
+
+<!-- Vendor Active Template JS Files -->
+<script th:src="@{/vendor/active_vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/php-email-form/validate.js}"></script>
+<script th:src="@{/vendor/active_vendor/aos/aos.js}"></script>
+<script th:src="@{/vendor/active_vendor/swiper/swiper-bundle.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/purecounter/purecounter_vanilla.js}"></script>
+<script th:src="@{/vendor/active_vendor/glightbox/js/glightbox.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/imagesloaded/imagesloaded.pkgd.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/isotope-layout/isotope.pkgd.min.js}"></script>
+
+<!-- Main Active Template JS File -->
+<script th:src="@{/javascript/active_js/main.js}"></script>
+</body>
+</html>

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Our stories - Trang chủ</title>
-
+    <title>Mầm xanh - Trang chủ</title>
+    <link rel="icon" type="image/png" th:href="@{/favicon.png}">
     <!--  Font Be Vietnam Pro -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -68,17 +68,17 @@
                     <div class="swiper-wrapper">
                         <div class="swiper-slide">
                             <div class="image-container">
-                                <img th:src="@{image/slideshow/1.png}" alt="Image" class="img-fluid">
+                                <img th:src="@{image/slideshow/1.png}" alt="Image" class="img-fluid" loading="lazy">
                             </div>
                         </div>
                         <div class="swiper-slide">
                             <div class="image-container">
-                                <img th:src="@{image/slideshow/2.png}" alt="Image" class="img-fluid">
+                                <img th:src="@{image/slideshow/2.png}" alt="Image" class="img-fluid" loading="lazy">
                             </div>
                         </div>
                         <div class="swiper-slide">
                             <div class="image-container">
-                                <img th:src="@{image/slideshow/3.png}" alt="Image" class="img-fluid">
+                                <img th:src="@{image/slideshow/3.png}" alt="Image" class="img-fluid" loading="lazy">
                             </div>
                         </div>
                     </div>
@@ -86,15 +86,15 @@
                 </div>
             </div>
             <div class="col-lg-4 order-lg-1">
-                <span class="section-subtitle" data-aos="fade-up">Welcom to Our stories</span>
+                <span class="section-subtitle" data-aos="fade-up">Mầm xanh xin chào!</span>
                 <h1 class="mb-4" data-aos="fade-up">
-                    Nơi câu chuyện của bạn được chia sẽ.
+                    Nơi đây chứa vật liệu làm xanh không gian sống của bạn.
                 </h1>
                 <p data-aos="fade-up">
-                    Một không gian mở, nơi bạn có thể kể câu chuyện của chính mình và được lắng nghe những câu chuyện khác.
+                    Cửa hàng kinh doanh sản phẩm cây xanh, chậu đẹp, phân bón,...và hơn thế nữa.
                 </p>
                 <p class="mt-5" data-aos="fade-up">
-                    <a href="/story/create" class="btn btn-get-started">Kể chuyện</a>
+                    <a href="/story/create" class="btn btn-get-started">Mua sắm</a>
                 </p>
             </div>
 
@@ -105,11 +105,11 @@
 <!-- Page Title -->
 <div class="page-title light-background">
     <div class="container">
-        <h1>Our stories</h1>
+        <h1>Mầm xanh</h1>
         <nav class="breadcrumbs">
             <ol>
-                <li><a href="/">ourstories.space</a></li>
-                <li class="current">Our stories</li>
+                <li><a href="/">Mầm xanh</a></li>
+                <li class="current">Mầm xanh</li>
             </ol>
         </nav>
     </div>
@@ -120,13 +120,31 @@
     <div class="container">
         <div class="contact">
             <div class="php-email-form">
-                <input type="text" id="search-input" placeholder="...">
-            <button id="search-button" class="btn bi-search">Tìm câu chuyện</button>
+                <div class="row">
+                    <div class="col-md-3">
+                        <select id="category-select" class="form-select">
+                            <option value="">Tất cả danh mục</option>
+                            <!-- JS sẽ chèn thêm các tùy chọn dựa trên categories -->
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="name-input" class="form-control" placeholder="Tên sản phẩm">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="brand-input" class="form-control" placeholder="Thương hiệu">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="color-input" class="form-control" placeholder="Màu sắc">
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <button id="search-button" class="btn bi-search">Tìm sản phẩm</button>
+                </div>
             </div>
         </div>
         <br>
         <div class="row gy-5">
-            <!-- Stories will be added here by javascript-->
+            <!-- Products will be added here by javascript-->
         </div>
 
         <div class="pagination-container">

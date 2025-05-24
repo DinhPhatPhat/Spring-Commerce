@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mầm xanh - Cập nhật sản phẩm</title>
+    <link rel="icon" type="image/png" th:href="@{/favicon.png}">
+    <!--  Font Be Vietnam Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Vendor Active Template CSS Files -->
+    <link th:href="@{/vendor/active_vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/aos/aos.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
+
+    <!-- Main Active Template CSS File -->
+    <link th:href="@{/css/active_css/main.css}" rel="stylesheet">
+
+    <!-- CSS File -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font/bee_vietnam_pro.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/product/create_update.css}">
+
+    <!-- JAVASCRIPT File -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script th:src="@{/javascript/alert.js}"></script>
+    <script th:src="@{/javascript/product/create_update.js}"></script>
+
+</head>
+<body>
+<!-- Header -->
+<div th:replace="~{layout/header :: header}"></div>
+
+<!-- Page Title -->
+<div class="page-title light-background">
+    <div class="container">
+        <h1>Cập nhật sản phẩm</h1>
+        <nav class="breadcrumbs">
+            <ol>
+                <li><a href="/">Mầm xanh</a></li>
+                <li class="current">Cập nhật sản phẩm</li>
+            </ol>
+        </nav>
+    </div>
+</div><!-- End Page Title -->
+<div class="alert alert-danger" id="alert-failed"></div>
+<div class="alert alert-success" id="alert-ok"></div>
+<!-- Contact Section -->
+<section id="contact" class="contact section">
+    <div class="container" data-aos="fade">
+        <div class="row gy-5 gx-lg-5">
+            <div class="col-lg-4">
+                <div class="info">
+                    <div class="info text-center">
+                        <img id="thumbnailPreview" th:src="${product.getImagePath() != null ? product.getImagePath() : '/image/product/default.png'} "
+                             alt="Thumbnail" class="thumbnail" loading="lazy">
+                        <br>
+                        <input type="file" id="thumbnailInput" accept="image/*" style="display: none;">
+                        <button id="changeThumbnailButton" class="btn btn-close-white"><i class="bi bi-pencil flex-shrink-0"> Ảnh sản phẩm</i></button>
+                        <br>
+                    </div>
+                </div>
+                <br>
+            </div>
+            <div class="col-lg-8">
+                <form role="form" class="php-email-form" onsubmit="return false">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="category">Danh mục</label>
+                                </div>
+                                <div class="col-md-9 form-group mt-3 mt-md-0">
+                                    <select name="category.id" id="category" class="form-control" required>
+                                        <option value="" disabled>Chọn danh mục</option>
+                                        <th:block th:each="cate : ${categories}">
+                                            <option th:value="${cate.id}"
+                                                    th:text="${cate.name}"
+                                                    th:selected="${product.category != null and cate.id == product.category.id}">
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <input type="hidden" id="id" th:value="${product.getId()}">
+                                <div class="col-md-3 form-group">
+                                    <label for="name">Tên sản phẩm</label>
+                                </div>
+                                <div class="col-md-9 form-group mt-3 mt-md-0">
+                                    <input type="text" name="name" class="form-control" id="name" required th:value="${product.getName()}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 form-group mt-3">
+                                    <label for="description">Mô tả</label>
+                                </div>
+                                <div class="col-md-9 form-group mt-3 mt-md-0">
+                                    <div class="form-group mt-3">
+                                        <textarea class="form-control" id="description" name="description" placeholder="Mô tả" th:utext="${product.getDescription()}"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 form-group mt-3">
+                                    <label for="price">Giá sản phẩm</label>
+                                </div>
+                                <div class="col-md-9 form-group mt-3 mt-md-0">
+                                    <div class="form-group mt-3">
+                                        <input type="number" step="1" class="form-control" id="price" name="price" placeholder="Giá" th:value="${product.getPrice()}" required>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="brand">Thương hiệu</label>
+                                </div>
+                                <div class="col-md-9 form-group mt-3 mt-md-0">
+                                    <input type="text" name="brand" class="form-control" id="brand" placeholder="Thương hiệu" th:value="${product.getBrand()}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="color">Màu sắc</label>
+                                </div>
+                                <div class="col-md-9 form-group mt-3 mt-md-0">
+                                    <input type="text" name="color" class="form-control" id="color" placeholder="Màu sắc" th:value="${product.getColor()}">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 form-group">
+                                    <label for="isActive">Kích hoạt</label>
+                                </div>
+                                <div class="col-md-9 form-group mt-3 mt-md-0">
+                                    <input type="checkbox" id="isActive" name="active" th:checked="${product.active}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center"><button type="submit" id="updateProductButton">Cập nhật danh mục sản phẩm</button></div>
+                </form>
+            </div>
+            <!-- End Contact Form -->
+        </div>
+    </div>
+</section><!-- /Contact Section -->
+
+<!-- Footer -->
+<div th:replace="~{layout/footer :: footer}"></div>
+
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+<!-- Preloader -->
+<div id="preloader"></div>
+
+<!-- Vendor Active Template JS Files -->
+<script th:src="@{/vendor/active_vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/aos/aos.js}"></script>
+<script th:src="@{/vendor/active_vendor/swiper/swiper-bundle.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/purecounter/purecounter_vanilla.js}"></script>
+<script th:src="@{/vendor/active_vendor/glightbox/js/glightbox.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/imagesloaded/imagesloaded.pkgd.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/isotope-layout/isotope.pkgd.min.js}"></script>
+
+<!-- Main Active Template JS File -->
+<script th:src="@{/javascript/active_js/main.js}"></script>
+</body>
+</html>

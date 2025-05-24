@@ -5,11 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import space.dinhphatphat.model.Story;
-import space.dinhphatphat.service.StoryService;
-import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
+import space.dinhphatphat.model.Category;
+import space.dinhphatphat.service.CategoryService;
+import space.dinhphatphat.service.ProductService;
+
 import java.util.List;
 
 @Controller
@@ -17,13 +16,13 @@ import java.util.List;
 public class DefaultController {
 
     @Autowired
-    private StoryService storyService;
-
+    private ProductService productService;
+    @Autowired
+    private CategoryService categoryService;
     @GetMapping
     public String index(Model model){
-        List<Story> stories = storyService.findAllOrderByUpdatedAtDesc();
-        model.addAttribute("stories", stories);
-        model.addAttribute("page", "index");
+        List<Category> categories = categoryService.findAll();
+        model.addAttribute("categories", categories);
         return "index";
     }
     @GetMapping("/info")
@@ -31,6 +30,4 @@ public class DefaultController {
         model.addAttribute("page", "info");
         return "info";
     }
-
-
 }

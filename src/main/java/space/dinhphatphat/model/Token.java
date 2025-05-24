@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tokens")
@@ -34,9 +33,4 @@ public class Token {
 
     @Column(name = "expired_at", columnDefinition = "TIMESTAMP DEFAULT (CURRENT_TIMESTAMP + INTERVAL 20 MINUTE)")
     private Timestamp expiredAt;
-
-    @PrePersist
-    protected void onCreate() {
-        expiredAt = Timestamp.valueOf(LocalDateTime.now().plusMinutes(20));
-    }
 }

@@ -13,15 +13,9 @@ public class UploadService {
     public static String upLoadImage(MultipartFile imageFile, int id, String uploadDir, String accessPath) throws IOException {
 
         //Take file extension
-        String fileExtension = "";
-        // dot index
-        int dotIndex = imageFile.getOriginalFilename().lastIndexOf(".");
-        // Check if dot index exists, then take file extension by substring method
-        if (dotIndex > 0) {
-            fileExtension = imageFile.getOriginalFilename().substring(dotIndex);
-        }
+        String fileExtension = ".webp";
 
-        //File name: <story id>.<file extension> (Ex: 1.png)
+        //File name: <story id>.<file extension> (Ex: 1..webp)
         String fileName = id + fileExtension;
         //Upload path
         File uploadPath = new File(uploadDir);

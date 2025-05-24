@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mầm xanh - Sửa danh mục sản phẩm</title>
+    <link rel="icon" type="image/png" th:href="@{/favicon.png}">
+    <!--  Font Be Vietnam Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Vendor Active Template CSS Files -->
+    <link th:href="@{/vendor/active_vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/aos/aos.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
+
+    <!-- Main Active Template CSS File -->
+    <link th:href="@{/css/active_css/main.css}" rel="stylesheet">
+
+    <!-- CSS File -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font/bee_vietnam_pro.css}">
+
+    <!-- JAVASCRIPT File -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script th:src="@{/javascript/alert.js}"></script>
+    <script th:src="@{/javascript/category/create_update.js}"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css">
+</head>
+<body>
+<!-- Header -->
+<div th:replace="~{layout/header :: header}"></div>
+
+<!-- Page Title -->
+<div class="page-title light-background">
+    <div class="container">
+        <h1>Sửa danh mục sản phẩm</h1>
+        <nav class="breadcrumbs">
+            <ol>
+                <li><a href="/">Mầm xanh</a></li>
+                <li class="current">Sửa danh mục sản phẩm</li>
+            </ol>
+        </nav>
+    </div>
+</div><!-- End Page Title -->
+<div class="alert alert-danger" id="alert-failed"></div>
+<div class="alert alert-success" id="alert-ok"></div>
+<!-- Contact Section -->
+<section id="contact" class="contact section">
+    <div class="container" data-aos="fade">
+        <div class="row gy-5 gx-lg-5">
+            <div class="col-lg-4">
+                <div class="info">
+                    <h3 th:text="'Sửa danh mục sản phẩm ' + ${category.id}"></h3>
+                    <div>
+                    </div>
+                </div>
+                <p class="mt-5" data-aos="fade-up">
+                    <a href="/product/create" class="btn btn-get-started"><i class="bi bi-list flex-shrink-0"> Thêm sản phẩm</i></a>
+                </p>
+                <br>
+            </div>
+            <div class="col-lg-8">
+                <form role="form" class="php-email-form" onsubmit="return false">
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                            <input type="text" name="name" class="form-control" id="name" th:value="${category.getName()}" required>
+                            <input type="hidden" name="id" class="form-control" id="id" th:value="${category.getId()}">
+                        </div>
+                    </div>
+                    <div class="text-center"><button type="submit" id="updateCategoryButton">Cập nhật danh mục sản phẩm</button></div>
+                </form>
+            </div>
+            <!-- End Contact Form -->
+        </div>
+    </div>
+
+    <div class="container">
+        <table id="productTable" class="hover">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Tên</th>
+                <th>Giá</th>
+                <th>Ngày tạo</th>
+                <th>Cập nhật gần nhất</th>
+                <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.id}"></td>
+                <td th:text="${product.name}"></td>
+                <td th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'POINT')} + ' VNĐ'"></td>
+                <td th:text="${#dates.format(product.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${#dates.format(product.updatedAt, 'dd/MM/yyyy HH:mm')}"></td>
+                <td>
+                    <a th:href="@{/product/update/{id}(id=${product.id})}" class="btn-edit">Chỉnh sửa</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section><!-- /Contact Section -->
+
+<!-- Footer -->
+<div th:replace="~{layout/footer :: footer}"></div>
+
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+<!-- Preloader -->
+<div id="preloader"></div>
+
+<!-- Vendor Active Template JS Files -->
+<script th:src="@{/vendor/active_vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/aos/aos.js}"></script>
+<script th:src="@{/vendor/active_vendor/swiper/swiper-bundle.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/purecounter/purecounter_vanilla.js}"></script>
+<script th:src="@{/vendor/active_vendor/glightbox/js/glightbox.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/imagesloaded/imagesloaded.pkgd.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/isotope-layout/isotope.pkgd.min.js}"></script>
+
+<!-- Main Active Template JS File -->
+<script th:src="@{/javascript/active_js/main.js}"></script>
+</body>
+</html>

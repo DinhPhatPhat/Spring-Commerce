@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>space.dinhphatphat</groupId>
-	<artifactId>ourstories</artifactId>
+	<artifactId>spring_commerce</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ourstories</name>
-	<description>A platform to share and manage stories using Spring Boot &amp; MySQL.</description>
+	<name>SpringCommerce</name>
+	<description>A platform to selling and buying using Spring Boot &amp; MySQL.</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -77,12 +77,36 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.sejda.imageio/webp-imageio -->
+		<dependency>
+			<groupId>org.sejda.imageio</groupId>
+			<artifactId>webp-imageio</artifactId>
+			<version>0.1.6</version>
+		</dependency>
 
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.12.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.12.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.12.6</version>
+		</dependency>
     </dependencies>
 
 	<build>

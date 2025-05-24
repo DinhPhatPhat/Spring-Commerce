@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="'Mầm xanh - '+${category.getName()}"></title>
+    <link rel="icon" type="image/png" th:href="@{/favicon.png}">
+    <!--  Font Be Vietnam Pro -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Vendor Active Template CSS Files -->
+    <link th:href="@{/vendor/active_vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/aos/aos.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
+    <link th:href="@{/vendor/active_vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
+
+    <!-- Main Active Template CSS File -->
+    <link th:href="@{/css/active_css/main.css}" rel="stylesheet">
+
+    <!-- CSS File -->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/font/bee_vietnam_pro.css}">
+
+    <!-- JAVASCRIPT File -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script th:src="@{/javascript/pagination.js}"></script>
+
+</head>
+<body>
+<!-- Header -->
+<div th:replace="~{layout/header :: header}"></div>
+
+<!-- Page Title -->
+<div class="page-title light-background">
+    <div class="container">
+        <h1 th:text="${category.getName()}"></h1>
+        <nav class="breadcrumbs">
+            <ol>
+                <li><a href="/">Mầm xanh</a></li>
+                <li class="current" th:text="${category.getName()}"></li>
+            </ol>
+        </nav>
+    </div>
+</div><!-- End Page Title -->
+
+<!-- Blog Posts 2 Section -->
+<section id="blog-posts-2" class="blog-posts-2 section">
+    <div class="container">
+        <div class="contact">
+            <div class="php-email-form">
+                <div class="row">
+                    <div class="col-md-3" style="display: none;">
+                        <select id="category-select" class="form-select">
+                            <option th:value="${category.getId()}" selected></option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="name-input" class="form-control" placeholder="Tên sản phẩm">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="brand-input" class="form-control" placeholder="Thương hiệu">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="color-input" class="form-control" placeholder="Màu sắc">
+                    </div>
+                </div>
+                <div class="text-center mt-3">
+                    <button id="search-button" class="btn bi-search">Tìm sản phẩm</button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="row gy-5">
+            <!-- Products will be added here by javascript-->
+        </div>
+        <div class="pagination-container">
+            <ul class="pagination blog-pagination section" id="pagination">
+                <!-- Pagination buttons will add here by javascript/pagination.js-->
+            </ul>
+        </div>
+    </div>
+</section><!-- /Blog Posts 2 Section -->
+
+<!-- Footer -->
+<div th:replace="~{layout/footer :: footer}"></div>
+
+<!-- Scroll Top -->
+<a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+
+<!-- Preloader -->
+<div id="preloader"></div>
+
+<!-- Vendor Active Template JS Files -->
+<script th:src="@{/vendor/active_vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/php-email-form/validate.js}"></script>
+<script th:src="@{/vendor/active_vendor/aos/aos.js}"></script>
+<script th:src="@{/vendor/active_vendor/swiper/swiper-bundle.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/purecounter/purecounter_vanilla.js}"></script>
+<script th:src="@{/vendor/active_vendor/glightbox/js/glightbox.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/imagesloaded/imagesloaded.pkgd.min.js}"></script>
+<script th:src="@{/vendor/active_vendor/isotope-layout/isotope.pkgd.min.js}"></script>
+
+<!-- Main Active Template JS File -->
+<script th:src="@{/javascript/active_js/main.js}"></script>
+</body>
+</html>
