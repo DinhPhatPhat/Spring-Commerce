@@ -1,6 +1,6 @@
 # Spring Commerce
+Link video demo: https://drive.google.com/drive/folders/1lugMNHAwTF6NlT7eoglE_ulY3unCeZKP?usp=sharing
 
-OurStories is a web application that allows users to share and explore personal stories.
 
 ## Technologies Used
 
