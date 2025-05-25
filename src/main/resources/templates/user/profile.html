@@ -146,6 +146,7 @@
                 <th>Số điện thoại</th>
                 <th>Địa chỉ</th>
                 <th>Chi tiết</th>
+                <th>Tổng tiền</th>
                 <th>Tình trạng</th>
             </tr>
             </thead>
@@ -162,12 +163,13 @@
                         <li th:each="item : ${order.orderItems}">
                             <span class="ml-1">
                                 <div class="row" th:text="${item.product.name}"></div>
-                                <div class="row" th:text="${item.quantity} + ' x ' + ${item.price}"></div>
+                                <div class="row" th:text="${item.quantity} + ' x ' + ${item.product.price}"></div>
                             </span>
 
                         </li>
                     </ul>
                 </td>
+                <td th:text="${order.totalPrice}"></td>
                 <td>
                     <th:block th:if="${user.role == 1}">
                         <select class="form-select order-status-select" th:attr="data-id=${order.id}">
@@ -185,12 +187,7 @@
             </tbody>
         </table>
     </div>
-
-
-
 </section><!-- /Contact Section -->
-
-
 
 <!-- Footer -->
 <div th:replace="~{layout/footer :: footer}"></div>

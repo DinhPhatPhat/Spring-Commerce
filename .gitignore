@@ -34,4 +34,4 @@ logs/
 .mvn/
 !.mvn/wrapper/maven-wrapper.jar
 
-data/mysql/mysql.sock
+data/
