@@ -1,5 +1,6 @@
 # Spring Commerce
 # Link video demo: https://drive.google.com/drive/folders/1lugMNHAwTF6NlT7eoglE_ulY3unCeZKP?usp=sharing
+# Link triển khai - Our stories: https://ourstories.space
 
 ## Giới thiệu
 **SpringCommerce** là một phần mềm trực tuyến đơn giản được xây dựng bằng **Java Spring Boot**. Bảo mật ở mức phương thức với mục tiêu chính của dự án này là triển khai một Sản phẩm khả dụng tối thiểu (MVP - Minimum Viable Product) thể hiện được các chức năng cơ bản của một nền tảng thương mại điện tử bao gồm hiển thị danh sách sản phẩm, tìm kiếm và lọc danh sách sản phẩm theo các tiêu chí, quản lý giỏ hàng, và đặt hàng và theo dõi trạng thái sản phẩm.
